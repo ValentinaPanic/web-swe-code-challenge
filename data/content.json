@@ -1,0 +1,29 @@
+{
+  "hero": {
+    "eyebrow": "New for Carriers",
+    "heading": "Find your next load in minutes, not hours",
+    "subheading": "Search thousands of live freight postings updated in real time, and book the loads that keep your trucks moving.",
+    "cta": {
+      "label": "Get Started Free",
+      "href": "#get-started"
+    }
+  },
+  "features": [
+    {
+      "title": "Real-Time Load Matching",
+      "description": "See new loads the moment they're posted, filtered to the lanes and equipment types you run."
+    },
+    {
+      "title": "Verified Broker Ratings",
+      "description": "Every broker is credit-checked and rated by other carriers, so you know who you're working with before you call."
+    },
+    {
+      "title": "Rate Insights",
+      "description": "Compare your rate against real market averages for the lane before you negotiate."
+    },
+    {
+      "title": "Mobile-First Search",
+      "description": "Search and book loads from the cab with a fast, simple mobile experience."
+    }
+  ]
+}
