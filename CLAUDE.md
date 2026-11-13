@@ -20,8 +20,13 @@
 - Content comes only from lib/content.ts getContent(). Media only from lib/media.ts.
 
 ## Styling rules
-- CSS Modules per component. Type styles come from styles/typography.module.css via
-  `composes:`; do not redeclare font-size/line-height pairs.
+- CSS Modules per component.
+- Typography: styles/typography.module.css (created in build step 5) has one class
+  per Figma text style, e.g. displayMedium = Display Medium/Strong (60/72, black),
+  headlineLarge = Headline Large/Strong (34/36, bold), bodyLarge = Body Large/Regular
+  (16/22). Font sizes come from tokens.css; line heights from tokens.extensions.css
+  (Figma’s line heights aren’t in the token set). Components pull these in with
+  CSS Modules `composes:`. Never set font-size/line-height pairs in a component.
 - No raw hex, px font sizes or font stacks in component CSS. Use var(--token).
   Values missing from the DS go in styles/tokens.extensions.css with a comment
   naming the Figma source, and an entry in SPEC.md "Design token usage".
@@ -36,8 +41,11 @@
 - Class names describe what a thing is (.callout, .benefitList), not how it looks.
 
 ## Workflow
-- Before building a section: get_design_context for that node at all 3 breakpoints;
-  treat output as reference only (convert Tailwind to CSS Modules + tokens).
+- Before building a section, call get_design_context for that section’s node in each
+  Figma frame: 1440px (1:4067), 960+ (1:666) and 360- (1:794).
+  The Figma MCP always returns React + Tailwind reference code. Tailwind is NOT
+  installed and must not be: read the values from that output (spacing, sizes,
+  colours) and write them as CSS Modules using tokens.
 - Download Figma assets into assets/images immediately; never ship figma.com URLs.
 - After each section: npm run lint && npm run typecheck && npm test && npm run build must pass
   with zero warnings, and the browser console must stay empty.

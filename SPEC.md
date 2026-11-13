@@ -17,6 +17,7 @@
 - **Adjusted:** the plan built the nav in HTML. I changed it to static images first, since the brief allows it and the evaluation focuses on what sits between the nav and footer. HTML nav and footer became an optional last step.
 - **Rejected:** I asked what would change if the form used Server Actions. With nowhere to send the data, it would add backend code with no purpose, so the form stays the only client component.
 - **Caught:** the agent noticed my `.claude/settings.json` hooks pointed at a script that didn't exist, and wrote it.
+- **Corrected:** reviewing the generated `CLAUDE.md`, I found two unclear rules. "Convert Tailwind to CSS Modules" read as if Tailwind were in the project (it isn't; Tailwind is just the format the Figma MCP returns its reference code in). "All 3 breakpoints" never named the frames. I had both reworded, and the typography rule now says its values come from Figma's text styles.
 
 ## Design token usage
 
