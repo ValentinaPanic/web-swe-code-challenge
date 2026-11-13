@@ -1,5 +1,10 @@
 # CLAUDE.md: DAT broker page take-home
 
+@AGENTS.md
+(Next.js keeps AGENTS.md up to date. Before using any Next.js API, read the
+matching guide in node_modules/next/dist/docs/: this is Next 16, which is newer
+than your training data. Commit AGENTS.md if `next dev` rewrites it.)
+
 ## Source of truth (in priority order)
 1. CHALLENGE.md: the brief and grading criteria.
    PLAN.md: the approved implementation plan; follow its build order and
@@ -9,6 +14,23 @@
 3. data/content.json for ALL copy. Never hardcode copy that exists there.
    If Figma copy differs, content.json wins; log it in SPEC.md.
 4. styles/tokens.css for color, type and radius. NEVER edit it.
+
+## Keep it simple (graded: "Simpler is better if simpler works")
+- Write the least code that meets the step's goal. PLAN.md says what to achieve.
+  If the mechanism it suggests is heavier than the goal needs, say so and
+  propose the simpler version before building it.
+- No abstraction for a single use. Don't add generic helpers, utility or
+  conditional types, factories, or option objects unless two real call sites
+  need them today.
+- Don't validate files that live in this repo (content.json, tokens) at runtime.
+  TypeScript and the build already cover them.
+- Don't add tests, test scripts or tooling the step doesn't ask for.
+- Don't change project config (package.json engines/type, tsconfig flags,
+  next.config) to make an approach work. Needing that is a sign the approach
+  is wrong: stop and ask.
+- Comments explain why, not what. No doc comments that restate the code.
+- Lesson from step 3: a fixed JSON file got 277 lines of guards, generic types,
+  tests and config changes. One `as Content` assertion was enough.
 
 ## Stack rules
 - Next.js App Router, React, TypeScript strict. No new dependencies without
@@ -49,7 +71,7 @@
   installed and must not be: read the values from that output (spacing, sizes,
   colours) and write them as CSS Modules using tokens.
 - Download Figma assets into assets/images immediately; never ship figma.com URLs.
-- After each section: npm run lint && npm run typecheck && npm test && npm run build must pass
+- After each section: npm run lint && npm run typecheck && npm run build must pass
   with zero warnings, and the browser console must stay empty.
 - Keep diffs small; one section per commit; conventional commit messages.
 - After each step, propose a SPEC.md update for me to review (you may draft the facts).

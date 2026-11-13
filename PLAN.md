@@ -215,7 +215,7 @@ data/content.json
    - **AI-log hook (done):** `.claude/settings.json` runs `.claude/hooks/ai-log.mjs` on `UserPromptSubmit` and `Stop`. The script appends each prompt, and each final reply (truncated at 4,000 characters), to `.claude/ai-log.jsonl`. It has no dependencies, never writes to stdout, and always exits 0, so it can't interrupt a session. It never touches `SPEC.md`, which stays a summary written by hand.
    - Commit `.claude/settings.json`, the hook script and `CLAUDE.md`: they show how the agent was set up, which counts toward "AI fluency". Decide whether the raw `.jsonl` log is committed or gitignored (it may contain more than reviewers need).
 2. **Scaffold:** run `create-next-app@latest` (TS, ESLint, App Router, no Tailwind, no src dir) into a **temp dir**, then copy the configs in so README and SPEC aren't overwritten. Confirm `strict: true` and add `noUncheckedIndexedAccess`. Delete `index.html` and `script.js`. Confirm a clean `build`. **Done:** Next.js 16.4.6 with React 19.3, which needs Node 20.9 or newer.
-3. **Content contract (risk: strict typing of JSON):** types, `getContent()` with guards, a test of the guards with Node's built-in runner (zero dependencies). Keep the guards in a module with relative imports only, so `node --test` can run it without Next's `@/` path alias. Node runs `.ts` natively only on newer versions, while `engines` says >=20.9: pick the simplest option that adds no dependency (for example raising `engines`) and record the choice. Also use `getContent()` for the meta description in `app/layout.tsx` (from `hero.subheading`). Media is not part of this step (`lib/media.ts` comes in step 4). **Done:** `types/content.ts` and `lib/content.ts` (`getContent()` returns the JSON with one `as Content` assertion). Guards and their tests were built, then removed on review as over-engineering for a fixed JSON file; `engines` stays >=20.9. Meta description from `hero.subheading`.
+3. **Content contract:** `types/content.ts` mirrors `content.json`; `getContent()` in `lib/content.ts` returns it with one `as Content` assertion; the layout's meta description comes from `hero.subheading`. **Done.** A first version added runtime guards, a generic `Widen<T>` type, 7 `node --test` tests and config changes (`engines`, `"type": "module"`, a tsconfig flag). I removed them on review: they guarded a fixed file in this repo. This led to the "Keep it simple" rules in `CLAUDE.md`.
 4. **Assets (risk: Figma URLs expire in 7 days):** export every image (hero composite, 3 feature shots, 2 spotlight screenshots and backgrounds, gradient SVG, icons). Also export the nav (1440, 960, 360) and footer (1440, 960) at 2x. Give them meaningful names under `assets/images` (for example `nav-1440@2x.png`), and sample the footer's edge colour.
 5. **Token layer:** extensions, typography module, globals, focus ring. Check them on a scratch section.
 6. **Page shell + sticky behavior (risk: the prototype's main idea):** `ArtDirectedImage`, then the sticky header (nav image), `main`, the sticky `CtaBanner`, and the footer image. Check three things:
@@ -254,68 +254,9 @@ data/content.json
 
 ---
 
-## 9. Draft CLAUDE.md
+## 9. CLAUDE.md
 
-```markdown
-# CLAUDE.md: DAT broker page take-home
-
-## Source of truth (in priority order)
-1. CHALLENGE.md (working-tree version): the brief and grading criteria.
-   PLAN.md: the approved implementation plan; follow its build order and
-   conflict defaults (§2), and update it if a decision changes.
-2. Figma file 2ik2JXVqCajst1ufcgm9Fh. Frames: 1440px (1:4067), 960+ (1:666),
-   360- (1:794), Prototype (30:2013; sticky nav + sticky bottom banner).
-3. data/content.json for ALL copy. Never hardcode copy that exists there.
-   If Figma copy differs, content.json wins; log it in SPEC.md.
-4. styles/tokens.css for color, type and radius. NEVER edit it.
-
-## Stack rules
-- Next.js App Router, React, TypeScript strict. No new dependencies without
-  asking first and giving a reason. No zod, no Tailwind, no UI kits.
-- Server Components by default. 'use client' only in AuthorityForm. Do not add
-  useEffect. Do not add client-side data fetching.
-- Nav and footer are static images (<picture> via ui/ArtDirectedImage) until I
-  say otherwise. Do not build them in HTML, and do not spend effort on them.
-- Content comes only from lib/content.ts getContent(). Media only from lib/media.ts.
-
-## Styling rules
-- CSS Modules per component.
-- Typography: styles/typography.module.css (created in build step 5) has one class
-  per Figma text style, e.g. displayMedium = Display Medium/Strong (60/72, black),
-  headlineLarge = Headline Large/Strong (34/36, bold), bodyLarge = Body Large/Regular
-  (16/22). Font sizes come from tokens.css; line heights from tokens.extensions.css
-  (Figma’s line heights aren’t in the token set). Components pull these in with
-  CSS Modules `composes:`. Never set font-size/line-height pairs in a component.
-- No raw hex, px font sizes or font stacks in component CSS. Use var(--token).
-  Values missing from the DS go in styles/tokens.extensions.css with a comment
-  naming the Figma source, and an entry in SPEC.md "Design token usage".
-- Trap: Figma "radius large" (72) = --radius-rounded. tokens --radius-large is 8.
-- Mobile-first. Breakpoints are literal: @media (min-width: 960px) and (min-width: 1440px).
-- Every interactive element needs a :focus-visible style. Motion only inside
-  prefers-reduced-motion: no-preference.
-
-## HTML rules
-- One h1. Sections use aria-labelledby. Real <label>s; never placeholder-as-label.
-- Decorative images: alt="". Product screenshots: specific alt.
-- Class names describe what a thing is (.callout, .benefitList), not how it looks.
-
-## Workflow
-- Each build step runs in a fresh session through /build-step
-  (.claude/skills/build-step/SKILL.md): one step, verify, record, commit, stop.
-- Before building a section, call get_design_context for that section’s node in each
-  Figma frame: 1440px (1:4067), 960+ (1:666) and 360- (1:794).
-  The Figma MCP always returns React + Tailwind reference code. Tailwind is NOT
-  installed and must not be: read the values from that output (spacing, sizes,
-  colours) and write them as CSS Modules using tokens.
-- Download Figma assets into assets/images immediately; never ship figma.com URLs.
-- After each section: npm run lint && npm run typecheck && npm run build must pass
-  with zero warnings, and the browser console must stay empty.
-- Keep diffs small; one section per commit; conventional commit messages.
-- After each step, propose a SPEC.md update for me to review (you may draft the facts).
-  Never write the "Interaction & UX decisions" reasoning yourself; I write it.
-  AI usage lists representative prompts only, not a transcript (that's .claude/ai-log.jsonl).
-- When unsure about a design gap, stop and ask. Don't invent behavior.
-```
+The agent rules live in [`CLAUDE.md`](CLAUDE.md), the only copy. (This section used to hold a draft, but keeping two copies in sync was a trap of its own.) It imports [`AGENTS.md`](AGENTS.md), which Next.js generates and maintains. That file points agents to the version-matched docs in `node_modules/next/dist/docs/`, because Next 16 is newer than most models' training data. `next dev` re-creates `AGENTS.md` whenever it detects an AI agent and the file is missing, so it stays committed.
 
 ---
 

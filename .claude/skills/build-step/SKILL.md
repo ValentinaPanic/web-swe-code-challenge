@@ -16,7 +16,9 @@ defines the process. If anything here conflicts with `CLAUDE.md`, `CLAUDE.md` wi
 
 ## 1. Load context
 Read these in full rather than skimming:
-- `CLAUDE.md`: the rules for this repo.
+- `CLAUDE.md`: the rules for this repo. It imports `AGENTS.md`, which points to the
+  Next.js docs that match the installed version. Read the relevant guide there
+  before using any Next.js API.
 - `PLAN.md` §7 (build order), plus every section the chosen step refers to
   (for example §2 conflicts, §4 types, §5 interactions).
 
@@ -34,6 +36,10 @@ If you're on the wrong branch, or the tree has changes you can't explain, stop a
   continue anyway.
 - Before writing code, restate the step in 3–5 bullets: what you'll build, which
   files you'll touch, and what's out of scope.
+- Add one more bullet: **the simplest version that meets the step's goal.** If
+  PLAN.md suggests something heavier (extra modules, validation, tests, config
+  changes), say so and build the simpler version unless it misses part of the
+  goal. Follow "Keep it simple" in CLAUDE.md.
 - If `PLAN.md` disagrees with the repo or the Figma file, stop and ask. Otherwise
   carry on without asking.
 
@@ -48,8 +54,11 @@ If you're on the wrong branch, or the tree has changes you can't explain, stop a
 - If you have to make a decision `PLAN.md` doesn't cover, always ask.
 
 ## 4. Verify
-- Run `npm run lint && npm run typecheck && npm test && npm run build`.
-  - Skip `npm test` only if there's no test script yet.
+- **Simplicity review first.** Read your own diff (`git diff --stat`, then the full
+  diff). For each new file, type, function, dependency or config change, ask:
+  does this step need it today? Delete anything that doesn't, and report the
+  final line count in your summary.
+- Run `npm run lint && npm run typecheck && npm run build`.
   - All of them must pass with zero warnings.
   - The route must still show as static (○) in the build output.
 - For steps that change the UI:

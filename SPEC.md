@@ -30,6 +30,12 @@ Long sessions build up stale context and cost more tokens, so I run each build s
 - **Design choice:** the skill holds only the process. Rules stay in `CLAUDE.md`, and step details stay in `PLAN.md`, so nothing is duplicated and the skill doesn't go stale as the plan changes.
 - **Guardrails:** it runs only when I type it (`disable-model-invocation`), never pushes, and won't claim a visual check it couldn't do.
 
+### 3. Rejected: over-engineering in step 3, and fixing the rules that caused it
+The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursive `Widen<T>` type, 7 `node --test` tests, and three config changes to make Node run them. All of it guarded a fixed file in this repo, which TypeScript already checks.
+- **Rejected:** I replaced it with a single `as Content` assertion (commit `058740c`).
+- **Root cause, not just the symptom:** my own plan had asked for guards and tests, and nothing told the agent to push back on a plan heavier than its goal. I added a "Keep it simple" section to `CLAUDE.md`: least code for the goal, no single-use abstractions, no runtime checks on repo files, no config changes to make an approach work. `/build-step` now states the simplest version before coding, and reviews its own diff before committing.
+- **Second trap found while fixing the first:** I'd declined the `AGENTS.md` that `create-next-app` offers. Next 16 uses it to point agents at docs matching the installed version (`node_modules/next/dist/docs/`), and `next dev` re-creates it whenever it detects an AI agent. Claude Code reads only `CLAUDE.md`, so I committed Next's generated `AGENTS.md` and imported it into `CLAUDE.md` with `@AGENTS.md`.
+
 ## Design token usage
 
 <!-- How did you use the tokens in styles/tokens.css? Any places you had to
