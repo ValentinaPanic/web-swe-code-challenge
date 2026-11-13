@@ -6,6 +6,18 @@
      (not a full transcript) — enough for us to see how you direct AI and
      evaluate what it gives you. -->
 
+**Tools:** Claude Code (planning, scaffolding, implementation) with the Figma MCP server (reading frames, variables and assets). The agent works from [`CLAUDE.md`](CLAUDE.md) (repo rules) and [`PLAN.md`](PLAN.md) (the approved plan). A small hook ([`.claude/hooks/ai-log.mjs`](.claude/hooks/ai-log.mjs)) keeps a raw log of every prompt and reply. This section lists only representative prompts.
+
+### 1. Planning before any code
+> "TASK: plan only. Write no code and install nothing. Read CHALLENGE.md first and treat its evaluation criteria as the bar for every decision. Then examine the Figma file … Look at every frame and breakpoint, including the prototype frame. … Where you're unsure, say so instead of guessing."
+
+- **Why I prompted it this way:** scoped to planning so I could review the approach before any code existed. Tied every decision to the grading criteria, and named the prototype frame explicitly because interaction details tend to live there.
+- **What came back:** a plan ([`PLAN.md`](PLAN.md)) with 16 numbered conflicts between Figma, `content.json` and `tokens.css`. It found the prototype's sticky nav and sticky "Get started today" banner, mobile feature copy that differs from `content.json`, and colours missing from the tokens.
+- **Accepted:** the folder structure and component split.
+- **Adjusted:** the plan built the nav in HTML. I changed it to static images first, since the brief allows it and the evaluation focuses on what sits between the nav and footer. HTML nav and footer became an optional last step.
+- **Rejected:** I asked what would change if the form used Server Actions. With nowhere to send the data, it would add backend code with no purpose, so the form stays the only client component.
+- **Caught:** the agent noticed my `.claude/settings.json` hooks pointed at a script that didn't exist, and wrote it.
+
 ## Design token usage
 
 <!-- How did you use the tokens in styles/tokens.css? Any places you had to

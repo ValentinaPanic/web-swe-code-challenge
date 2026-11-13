@@ -1,0 +1,5 @@
+# macOS
+.DS_Store
+
+# Raw AI session log (curated summary lives in SPEC.md)
+.claude/ai-log.jsonl
