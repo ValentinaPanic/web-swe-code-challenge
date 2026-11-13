@@ -33,6 +33,9 @@
 <!-- Anything you assumed, skipped, or simplified given the time box, and
      why you made that call. -->
 
+- **Starter files:** `index.html` and `script.js` were framework-neutral stubs, so Next.js replaces them. Their `lang="en"` lives on in `app/layout.tsx`. `tokens.css` and `content.json` stay where they were, unchanged.
+- **Scaffold:** Next.js 16 (App Router), React 19, TypeScript in strict mode plus `noUncheckedIndexedAccess`, and ESLint with Next's rules. No Tailwind: the design tokens already exist as CSS variables, and a second styling system would compete with them.
+
 ## If I had more time
 
 <!-- Anything you'd change, refactor, or add. -->

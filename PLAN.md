@@ -214,7 +214,7 @@ data/content.json
 1. **Housekeeping:** commit the updated CHALLENGE.md. Add `.gitignore`. Start the SPEC AI log with this planning prompt.
    - **AI-log hook (done):** `.claude/settings.json` runs `.claude/hooks/ai-log.mjs` on `UserPromptSubmit` and `Stop`. The script appends each prompt, and each final reply (truncated at 4,000 characters), to `.claude/ai-log.jsonl`. It has no dependencies, never writes to stdout, and always exits 0, so it can't interrupt a session. It never touches `SPEC.md`, which stays a summary written by hand.
    - Commit `.claude/settings.json`, the hook script and `CLAUDE.md`: they show how the agent was set up, which counts toward "AI fluency". Decide whether the raw `.jsonl` log is committed or gitignored (it may contain more than reviewers need).
-2. **Scaffold:** run `create-next-app@latest` (TS, ESLint, App Router, no Tailwind, no src dir) into a **temp dir**, then copy the configs in so README and SPEC aren't overwritten. Confirm `strict: true` and add `noUncheckedIndexedAccess`. Delete `index.html` and `script.js`. Confirm a clean `build`. *Verify the current Next major and its required Node version at scaffold time; I'm not certain which is current.*
+2. **Scaffold:** run `create-next-app@latest` (TS, ESLint, App Router, no Tailwind, no src dir) into a **temp dir**, then copy the configs in so README and SPEC aren't overwritten. Confirm `strict: true` and add `noUncheckedIndexedAccess`. Delete `index.html` and `script.js`. Confirm a clean `build`. **Done:** Next.js 16.4.6 with React 19.3, which needs Node 20.9 or newer.
 3. **Content contract (risk: strict typing of JSON):** types, `getContent()` with guards, a test of the guards with Node's built-in runner (zero dependencies).
 4. **Assets (risk: Figma URLs expire in 7 days):** export every image (hero composite, 3 feature shots, 2 spotlight screenshots and backgrounds, gradient SVG, icons). Also export the nav (1440, 960, 360) and footer (1440, 960) at 2x. Give them meaningful names under `assets/images` (for example `nav-1440@2x.png`), and sample the footer's edge colour.
 5. **Token layer:** extensions, typography module, globals, focus ring. Check them on a scratch section.
@@ -326,7 +326,6 @@ Framework and rendering, CORS approach, CSS Modules, token-extension strategy, f
 - The exact 360 type sizes for the hero `h1` and spotlight headings (they appear to be 34/36 and 16/22). Confirm with `get_design_context` when building those sections.
 - The divider colour (likely neutral-100 or neutral-200).
 - The footer background colour, needed to extend the image edge-to-edge.
-- The current Next.js major version and its minimum Node version, at scaffold time.
 - Whether white text on the gradient's purple end passes AA at 10px bold caps.
 
 ---
