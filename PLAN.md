@@ -211,11 +211,11 @@ data/content.json
 
 ## 7. Build order: small tasks, riskiest first
 
-1. **Housekeeping:** commit the updated CHALLENGE.md. Add `.gitignore`. Start the SPEC AI log with this planning prompt.
+1. **Housekeeping:** commit the updated CHALLENGE.md. Add `.gitignore`. Start the SPEC AI log with this planning prompt. **Done:** brief, plan, CLAUDE.md, AI-log hook and first SPEC entry committed.
    - **AI-log hook (done):** `.claude/settings.json` runs `.claude/hooks/ai-log.mjs` on `UserPromptSubmit` and `Stop`. The script appends each prompt, and each final reply (truncated at 4,000 characters), to `.claude/ai-log.jsonl`. It has no dependencies, never writes to stdout, and always exits 0, so it can't interrupt a session. It never touches `SPEC.md`, which stays a summary written by hand.
    - Commit `.claude/settings.json`, the hook script and `CLAUDE.md`: they show how the agent was set up, which counts toward "AI fluency". Decide whether the raw `.jsonl` log is committed or gitignored (it may contain more than reviewers need).
 2. **Scaffold:** run `create-next-app@latest` (TS, ESLint, App Router, no Tailwind, no src dir) into a **temp dir**, then copy the configs in so README and SPEC aren't overwritten. Confirm `strict: true` and add `noUncheckedIndexedAccess`. Delete `index.html` and `script.js`. Confirm a clean `build`. **Done:** Next.js 16.4.6 with React 19.3, which needs Node 20.9 or newer.
-3. **Content contract (risk: strict typing of JSON):** types, `getContent()` with guards, a test of the guards with Node's built-in runner (zero dependencies).
+3. **Content contract (risk: strict typing of JSON):** types, `getContent()` with guards, a test of the guards with Node's built-in runner (zero dependencies). Keep the guards in a module with relative imports only, so `node --test` can run it without Next's `@/` path alias. Node runs `.ts` natively only on newer versions, while `engines` says >=20.9: pick the simplest option that adds no dependency (for example raising `engines`) and record the choice. Also use `getContent()` for the meta description in `app/layout.tsx` (from `hero.subheading`). Media is not part of this step (`lib/media.ts` comes in step 4).
 4. **Assets (risk: Figma URLs expire in 7 days):** export every image (hero composite, 3 feature shots, 2 spotlight screenshots and backgrounds, gradient SVG, icons). Also export the nav (1440, 960, 360) and footer (1440, 960) at 2x. Give them meaningful names under `assets/images` (for example `nav-1440@2x.png`), and sample the footer's edge colour.
 5. **Token layer:** extensions, typography module, globals, focus ring. Check them on a scratch section.
 6. **Page shell + sticky behavior (risk: the prototype's main idea):** `ArtDirectedImage`, then the sticky header (nav image), `main`, the sticky `CtaBanner`, and the footer image. Check three things:
@@ -227,6 +227,8 @@ data/content.json
 9. **Spotlight:** media composition (dark panel, 20% photo, inset screenshot), `mediaPosition`, mobile stacking.
 10. **Hero:** gradient background, callout, image, three type sizes.
 11. **Section dividers + full responsive pass** at 320, 360, 600, 960, 1280, 1440 and 1920.
+> **Each step runs in a fresh session via `/build-step`** (`.claude/skills/build-step/SKILL.md`), which marks the step `**Done:**` here when finished.
+>
 > **Every step from 1 to 13 ends with a short SPEC.md update** to the matching §11 section (a few lines, done while the decision is fresh). Step 12 is then a polish pass, not a write-up from memory.
 
 12. **QA pass** (§8), then polish README and SPEC, push to GitHub, add the reviewer as a collaborator if the repo is private. **The submission is complete at this point.**
@@ -298,6 +300,8 @@ data/content.json
 - Class names describe what a thing is (.callout, .benefitList), not how it looks.
 
 ## Workflow
+- Each build step runs in a fresh session through /build-step
+  (.claude/skills/build-step/SKILL.md): one step, verify, record, commit, stop.
 - Before building a section, call get_design_context for that section’s node in each
   Figma frame: 1440px (1:4067), 960+ (1:666) and 360- (1:794).
   The Figma MCP always returns React + Tailwind reference code. Tailwind is NOT

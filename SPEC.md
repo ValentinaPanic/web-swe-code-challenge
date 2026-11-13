@@ -19,6 +19,17 @@
 - **Caught:** the agent noticed my `.claude/settings.json` hooks pointed at a script that didn't exist, and wrote it.
 - **Corrected:** reviewing the generated `CLAUDE.md`, I found two unclear rules. "Convert Tailwind to CSS Modules" read as if Tailwind were in the project (it isn't; Tailwind is just the format the Figma MCP returns its reference code in). "All 3 breakpoints" never named the frames. I had both reworded, and the typography rule now says its values come from Figma's text styles.
 
+### 2. One fresh session per build step: the `/build-step` skill
+Long sessions build up stale context and cost more tokens, so I run each build step in a new session. Instead of re-explaining the project every time, I had the agent write a project skill, [`.claude/skills/build-step/SKILL.md`](.claude/skills/build-step/SKILL.md). Running `/build-step` (or `/build-step 4`) makes the agent:
+1. Read `CLAUDE.md` and the relevant parts of `PLAN.md`, and check the branch and git state.
+2. Pick the next step: the first one in `PLAN.md` without a `**Done:**` marker.
+3. Restate the step and its scope before coding, and stop to ask if `PLAN.md` disagrees with the repo or Figma.
+4. Build only that step, then run lint, typecheck, tests and build with zero warnings.
+5. Mark the step Done, draft the SPEC update (but leave interaction reasoning to me), make one commit, and stop.
+
+- **Design choice:** the skill holds only the process. Rules stay in `CLAUDE.md`, and step details stay in `PLAN.md`, so nothing is duplicated and the skill doesn't go stale as the plan changes.
+- **Guardrails:** it runs only when I type it (`disable-model-invocation`), never pushes, and won't claim a visual check it couldn't do.
+
 ## Design token usage
 
 <!-- How did you use the tokens in styles/tokens.css? Any places you had to

@@ -41,6 +41,8 @@
 - Class names describe what a thing is (.callout, .benefitList), not how it looks.
 
 ## Workflow
+- Each build step runs in a fresh session through /build-step
+  (.claude/skills/build-step/SKILL.md): one step, verify, record, commit, stop.
 - Before building a section, call get_design_context for that section’s node in each
   Figma frame: 1440px (1:4067), 960+ (1:666) and 360- (1:794).
   The Figma MCP always returns React + Tailwind reference code. Tailwind is NOT
