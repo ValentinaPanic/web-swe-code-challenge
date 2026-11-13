@@ -11,7 +11,7 @@ This is a take-home for a Senior Web Engineer role at DAT. The task is a "Soluti
 | Visual accuracy (spacing, type, color, layout, responsive) | Built against 3 frames (1440, 960+, 360−) plus the prototype. Exact frame values at each breakpoint. Screenshot comparison at the end. |
 | Design token usage | `tokens.css` stays unchanged. A separate, documented extension file holds only what the token set lacks. No raw hex in component CSS. |
 | Semantic HTML / W3C | Landmarks, one `h1`, logical heading levels, real labels, fieldset/legend. Checked with the Nu validator. |
-| Code quality (DRY, no console errors or exceptions, no races) | No client fetching, so no races. One shared Button, Section and field primitives. Typed content loader that fails loudly at build time. |
+| Code quality (DRY, no console errors or exceptions, no races) | No client fetching, so no races. One shared Button, Section and field primitives. Typed content loader (`getContent()`). |
 | AI fluency | A selection of representative prompts in SPEC.md, kept up after each step (§11). CLAUDE.md and the AI-log hook show how the agent was set up and coached. |
 | Appropriate scope | Server Components by default, statically prerendered. Client JS only for the form. No `useEffect`. Nav and footer are static images, so the effort goes where reviewers are looking: everything between them. |
 
@@ -66,7 +66,7 @@ This is a take-home for a Senior Web Engineer role at DAT. The task is a "Soluti
 
 **Rendering.** The page has no dynamic APIs, so Next prerenders it statically (○ in build output). That is static generation, not SSR, which fits the brief's "not looking for SSR". I won't use `output: 'export'`, so `next/image` optimization keeps working with `next start`.
 
-**Typing without zod.** `types/content.ts` holds the interfaces. JSON imports widen string unions such as `variant` and `type` to `string`, so `getContent()` runs small hand-written guards (`isButtonVariant`, `isFieldType`, `isMediaPosition`) and throws a descriptive `Error` if content is malformed. That fails the **build**, not the user's browser. Everything else is narrowed structurally.
+**Typing without zod.** `types/content.ts` holds the interfaces. JSON imports widen string unions such as `variant` and `type` to `string`, so `getContent()` returns the import with a single `as Content` assertion. No runtime validation: the content file is ours and fixed for this challenge (a real CMS would need it; see SPEC "If I had more time").
 
 **Server vs client components.**
 - Server (default): everything except the items below.
@@ -114,7 +114,7 @@ components/
   ui/Button/            server  <a> when href, else <button>
   ui/Section/           server  <section> + container + optional divider
 lib/
-  content.ts            getContent(): Promise<Content> + guards
+  content.ts            getContent(): Promise<Content>
   media.ts              image imports + alt text, keyed by section/index
   formOptions.ts        select options (placeholder; see Q3)
 types/content.ts
@@ -215,7 +215,7 @@ data/content.json
    - **AI-log hook (done):** `.claude/settings.json` runs `.claude/hooks/ai-log.mjs` on `UserPromptSubmit` and `Stop`. The script appends each prompt, and each final reply (truncated at 4,000 characters), to `.claude/ai-log.jsonl`. It has no dependencies, never writes to stdout, and always exits 0, so it can't interrupt a session. It never touches `SPEC.md`, which stays a summary written by hand.
    - Commit `.claude/settings.json`, the hook script and `CLAUDE.md`: they show how the agent was set up, which counts toward "AI fluency". Decide whether the raw `.jsonl` log is committed or gitignored (it may contain more than reviewers need).
 2. **Scaffold:** run `create-next-app@latest` (TS, ESLint, App Router, no Tailwind, no src dir) into a **temp dir**, then copy the configs in so README and SPEC aren't overwritten. Confirm `strict: true` and add `noUncheckedIndexedAccess`. Delete `index.html` and `script.js`. Confirm a clean `build`. **Done:** Next.js 16.4.6 with React 19.3, which needs Node 20.9 or newer.
-3. **Content contract (risk: strict typing of JSON):** types, `getContent()` with guards, a test of the guards with Node's built-in runner (zero dependencies). Keep the guards in a module with relative imports only, so `node --test` can run it without Next's `@/` path alias. Node runs `.ts` natively only on newer versions, while `engines` says >=20.9: pick the simplest option that adds no dependency (for example raising `engines`) and record the choice. Also use `getContent()` for the meta description in `app/layout.tsx` (from `hero.subheading`). Media is not part of this step (`lib/media.ts` comes in step 4). **Done:** `types/content.ts`, `lib/contentGuards.ts` (`parseContent` narrows variant/type/mediaPosition and throws with the JSON path), `lib/content.ts`, 7 `node --test` tests; `engines` raised to >=22.18 (native TS type stripping), `"type": "module"` and `allowImportingTsExtensions` so Node runs the `.ts` tests directly; meta description from `hero.subheading`.
+3. **Content contract (risk: strict typing of JSON):** types, `getContent()` with guards, a test of the guards with Node's built-in runner (zero dependencies). Keep the guards in a module with relative imports only, so `node --test` can run it without Next's `@/` path alias. Node runs `.ts` natively only on newer versions, while `engines` says >=20.9: pick the simplest option that adds no dependency (for example raising `engines`) and record the choice. Also use `getContent()` for the meta description in `app/layout.tsx` (from `hero.subheading`). Media is not part of this step (`lib/media.ts` comes in step 4). **Done:** `types/content.ts` and `lib/content.ts` (`getContent()` returns the JSON with one `as Content` assertion). Guards and their tests were built, then removed on review as over-engineering for a fixed JSON file; `engines` stays >=20.9. Meta description from `hero.subheading`.
 4. **Assets (risk: Figma URLs expire in 7 days):** export every image (hero composite, 3 feature shots, 2 spotlight screenshots and backgrounds, gradient SVG, icons). Also export the nav (1440, 960, 360) and footer (1440, 960) at 2x. Give them meaningful names under `assets/images` (for example `nav-1440@2x.png`), and sample the footer's edge colour.
 5. **Token layer:** extensions, typography module, globals, focus ring. Check them on a scratch section.
 6. **Page shell + sticky behavior (risk: the prototype's main idea):** `ArtDirectedImage`, then the sticky header (nav image), `main`, the sticky `CtaBanner`, and the footer image. Check three things:
@@ -247,10 +247,10 @@ data/content.json
 | Tokens | `grep -rE '#[0-9a-fA-F]{3,6}\b' components app` returns nothing. Every hex lives in `tokens.css` or (documented) `tokens.extensions.css`. |
 | Semantic / W3C | Run the built HTML (`next build && next start`, save page source) through the Nu HTML Checker (validator.w3.org/nu, file upload; the page is public marketing copy). Check the heading outline with a browser outline extension or DevTools Accessibility tree. |
 | A11y (bonus) | Lighthouse Accessibility ≥ 95. A keyboard-only pass (tab order, focus ring visible on light and dark, scroller scrolls, form errors announced). VoiceOver spot check of the form and landmarks. axe DevTools as a browser extension (nothing added to the repo). |
-| Code quality | `tsc --noEmit`, ESLint, and `next build` all clean with no warnings. Browser console empty (no hydration, `next/image` sizes or key warnings) at all breakpoints. Invalid-content test proves the loader fails loudly. |
+| Code quality | `tsc --noEmit`, ESLint, and `next build` all clean with no warnings. Browser console empty (no hydration, `next/image` sizes or key warnings) at all breakpoints. |
 | Scope | Only the files marked client above have `'use client'`. Build output shows the route as static (○). |
 | Behavior | Hero CTA scrolls to the form below the sticky nav. Submit with empty fields gives native messages and no reload. A valid submit shows the success message, resets the form, and leaves the URL unchanged. |
-| Tests | `npm test` uses `node --test` for the content guards (no dependencies). No Playwright or RTL: a static marketing page doesn't justify them, and SPEC notes them under "If I had more time". |
+| Tests | No automated tests for now (the content guards were removed as over-engineering for a fixed JSON file). No Playwright or RTL: a static marketing page doesn't justify them, and SPEC notes them under "If I had more time". |
 
 ---
 

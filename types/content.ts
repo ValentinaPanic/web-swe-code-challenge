@@ -1,14 +1,10 @@
-// Shape of data/content.json (the mock CMS response). Mirrors the JSON exactly;
-// string unions are enforced at load time by lib/contentGuards.ts.
+// Shape of data/content.json (the mock CMS response). Mirrors the JSON exactly.
 
-export const BUTTON_VARIANTS = ['primary', 'outline', 'ghost', 'solid'] as const;
-export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
+export type ButtonVariant = 'primary' | 'outline' | 'ghost' | 'solid';
 
-export const FIELD_TYPES = ['text', 'email', 'tel', 'select'] as const;
-export type FieldType = (typeof FIELD_TYPES)[number];
+export type FieldType = 'text' | 'email' | 'tel' | 'select';
 
-export const MEDIA_POSITIONS = ['left', 'right'] as const;
-export type MediaPosition = (typeof MEDIA_POSITIONS)[number];
+export type MediaPosition = 'left' | 'right';
 
 export interface Link {
   label: string;
