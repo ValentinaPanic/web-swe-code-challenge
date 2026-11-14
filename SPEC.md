@@ -41,6 +41,14 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
 <!-- How did you use the tokens in styles/tokens.css? Any places you had to
      make a judgment call because a token didn't quite fit? -->
 
+- **`tokens.css` is unchanged.** Values it lacks live in [`styles/tokens.extensions.css`](styles/tokens.extensions.css), each commented with its Figma source:
+  - **Spacing** (`--space-200` … `--space-3000`): the DS has no spacing scale. Names follow Figma's own variable, `cg-spacing-200` = 8px, so a step of 100 is 4px. That also fits the off-grid values the frames use (12, 20, 44).
+  - **Line heights** (`--line-height-*`): Figma's text styles pair each font size with a line height the DS doesn't define. Each one is numbered after the `--font-size-*` step it goes with (for example `--line-height-900` = 72px for the 60px display size).
+  - **`--letter-spacing-caps`** (1.5px): button labels, from Figma `cg-font-letter_spacing-caps`.
+- **Typography:** [`styles/typography.module.css`](styles/typography.module.css) has one class per Figma text style used on the page (`displayMedium`, `headlineLarge`, `bodyLarge`…). Components pull these in with `composes:`, so no component sets its own font size and line height.
+- **Font (judgment call):** Figma uses Sequel Sans, a licensed font with in-between weights. The page uses the DS system stack, mapped as Book → regular, Bold → bold and Black → black. Line breaks can differ slightly from Figma.
+- **Text color (judgment call):** Figma's Text/Primary (`#192129`) isn't in the DS. Body text uses `--color-neutral-1000`, which looks the same at text sizes.
+- **Focus ring:** built from DS tokens only: `--border-weight-focus` (4px) in `--color-primary-300`.
 - **Colors inside SVG assets:** the icon SVGs keep Figma's fills (`#0046E0` = `--color-primary-500`, `#192129` for the check icon) because an `<img>` can't take CSS variables. These are asset files, not component CSS.
 
 ## Interaction & UX decisions

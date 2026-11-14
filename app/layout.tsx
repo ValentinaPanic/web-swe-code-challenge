@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getContent } from "@/lib/content";
 import "@/styles/tokens.css";
+import "@/styles/tokens.extensions.css";
+import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { hero } = await getContent();

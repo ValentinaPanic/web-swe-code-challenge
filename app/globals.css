@@ -1,0 +1,40 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-300);
+  line-height: var(--line-height-300);
+  /* Figma Text/Primary isn't in DS; neutral-1000 is the closest token (PLAN C2). */
+  color: var(--color-neutral-1000);
+  background: var(--color-neutral-000);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Keyboard-only ring; mouse clicks don't trigger :focus-visible on buttons and links. */
+:focus-visible {
+  outline: var(--border-weight-focus) solid var(--color-primary-300);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

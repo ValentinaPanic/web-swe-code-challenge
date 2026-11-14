@@ -1,0 +1,43 @@
+/*
+  Values the design system (tokens.css) doesn't have yet, all taken from the
+  Figma file. Keep this file to real gaps: if tokens.css covers a value, use it.
+*/
+
+:root {
+  /*
+    Not in DS: spacing, from Figma's cg-spacing scale. Its one published
+    variable is cg-spacing-200 = 8, so a step of 100 is 4px.
+  */
+  --space-200: 8px;
+  --space-300: 12px;
+  --space-400: 16px;
+  --space-500: 20px;
+  --space-600: 24px;
+  --space-800: 32px;
+  --space-1000: 40px;
+  --space-1100: 44px;
+  --space-1200: 48px;
+  --space-1400: 56px;
+  --space-1600: 64px;
+  --space-1800: 72px;
+  --space-2200: 88px;
+  --space-2400: 96px;
+  --space-2800: 112px;
+  --space-3000: 120px;
+
+  /*
+    Not in DS: line heights, from Figma's cg-font-line_height variables.
+    Numbered to pair with the --font-size-* step they're used with.
+  */
+  --line-height-050: 16px; /* button, 10px */
+  --line-height-200: 20px; /* body small, 14px */
+  --line-height-300: 22px; /* body large, title large, 16px */
+  --line-height-400: 24px; /* headline small, 20px */
+  --line-height-500: 28px; /* headline medium, 24px */
+  --line-height-600: 36px; /* headline large, 34px */
+  --line-height-700: 56px; /* display small, 48px */
+  --line-height-900: 72px; /* display medium, 60px */
+
+  /* Not in DS: from Figma cg-font-letter_spacing-caps (button labels). */
+  --letter-spacing-caps: 1.5px;
+}

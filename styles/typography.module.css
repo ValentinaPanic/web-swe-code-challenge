@@ -1,0 +1,81 @@
+/*
+  One class per Figma text style used on the page. Components pull these in
+  with `composes:`.
+  Sequel Sans weights map to the DS scale (PLAN C1): Book → regular,
+  Bold Body / Bold Head → bold, Black Head → black.
+*/
+
+.displayMedium {
+  font-size: var(--font-size-900);
+  line-height: var(--line-height-900);
+  font-weight: var(--font-weight-black);
+}
+
+.displaySmall {
+  font-size: var(--font-size-700);
+  line-height: var(--line-height-700);
+  font-weight: var(--font-weight-black);
+}
+
+.headlineLarge {
+  font-size: var(--font-size-600);
+  line-height: var(--line-height-600);
+  font-weight: var(--font-weight-bold);
+}
+
+.headlineLargeBlack {
+  font-size: var(--font-size-600);
+  line-height: var(--line-height-600);
+  font-weight: var(--font-weight-black);
+}
+
+.headlineMediumBlack {
+  font-size: var(--font-size-500);
+  line-height: var(--line-height-500);
+  font-weight: var(--font-weight-black);
+}
+
+.headlineSmallBlack {
+  font-size: var(--font-size-400);
+  line-height: var(--line-height-400);
+  font-weight: var(--font-weight-black);
+}
+
+.titleLargeBlack {
+  font-size: var(--font-size-300);
+  line-height: var(--line-height-300);
+  font-weight: var(--font-weight-black);
+}
+
+.bodyLarge {
+  font-size: var(--font-size-300);
+  line-height: var(--line-height-300);
+  font-weight: var(--font-weight-regular);
+}
+
+.bodyLargeStrong {
+  font-size: var(--font-size-300);
+  line-height: var(--line-height-300);
+  font-weight: var(--font-weight-bold);
+}
+
+.bodySmall {
+  font-size: var(--font-size-200);
+  line-height: var(--line-height-200);
+  font-weight: var(--font-weight-regular);
+}
+
+.bodySmallStrong {
+  font-size: var(--font-size-200);
+  line-height: var(--line-height-200);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Figma has no named style for buttons; this is the shared 10/16 caps label. */
+.button {
+  font-size: var(--font-size-050);
+  line-height: var(--line-height-050);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+}
