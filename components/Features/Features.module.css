@@ -114,7 +114,7 @@
 }
 
 .description {
-  composes: featureText from '../../styles/typography.module.css';
+  composes: bodyResponsive from '../../styles/typography.module.css';
 }
 
 @media (min-width: 960px) {

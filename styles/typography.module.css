@@ -134,15 +134,37 @@
   }
 }
 
-/* Feature card text: Body Small/Regular, Body Large/Regular from 960 (PLAN C7). */
-.featureText {
+/* Spotlight title: Title Large/Black, Headline Medium/Black from 960. */
+.spotlightTitle {
+  font-size: var(--font-size-300);
+  line-height: var(--line-height-300);
+  font-weight: var(--font-weight-black);
+}
+
+@media (min-width: 960px) {
+  .spotlightTitle {
+    font-size: var(--font-size-500);
+    line-height: var(--line-height-500);
+  }
+}
+
+/* Feature and spotlight text: Body Small/Regular, Body Large/Regular from 960 (PLAN C7). */
+.bodyResponsive {
   font-size: var(--font-size-200);
   line-height: var(--line-height-200);
   font-weight: var(--font-weight-regular);
 }
 
+/* Spotlight benefits: Body Small/Strong, Body Large/Strong from 960. */
+.bodyResponsiveStrong {
+  font-size: var(--font-size-200);
+  line-height: var(--line-height-200);
+  font-weight: var(--font-weight-bold);
+}
+
 @media (min-width: 960px) {
-  .featureText {
+  .bodyResponsive,
+  .bodyResponsiveStrong {
     font-size: var(--font-size-300);
     line-height: var(--line-height-300);
   }

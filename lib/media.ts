@@ -4,6 +4,7 @@ import footer960 from '@/assets/images/footer-960@2x.png';
 import nav1440 from '@/assets/images/nav-1440@2x.png';
 import nav360 from '@/assets/images/nav-360@2x.png';
 import nav960 from '@/assets/images/nav-960@2x.png';
+import truckStop from '@/assets/images/photo-truck-stop.png';
 import contractBid from '@/assets/images/screenshot-contract-bid.png';
 import loadBoard from '@/assets/images/screenshot-load-board.png';
 import rateView from '@/assets/images/screenshot-rateview.png';
@@ -23,9 +24,18 @@ export const footerImage = {
   at1440: footer1440,
 };
 
+const loadBoardImage = { src: loadBoard, alt: 'DAT One load board search results' };
+const rateViewImage = { src: rateView, alt: 'RateView lane rate analytics' };
+
 // In the same order as content.features.items.
 export const featureImages = [
-  { src: loadBoard, alt: 'DAT One load board search results' },
-  { src: rateView, alt: 'RateView lane rate analytics' },
+  loadBoardImage,
+  rateViewImage,
   { src: contractBid, alt: 'DAT contract bid with carrier awards' },
 ];
+
+// In the same order as content.spotlights.
+export const spotlightImages = [loadBoardImage, rateViewImage];
+
+// Decorative backdrop behind every spotlight screenshot.
+export const spotlightPhoto = truckStop;

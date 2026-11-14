@@ -43,6 +43,11 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
 - **Adjusted:** this page is one segment page of a large marketing site with many forms. The agent split out a shared `Field` (bordered box and floating label, written once), with `TextField`, `SelectField` and `CheckboxGroup` on top. They take plain props rather than the CMS field shape, so any form can use them, and `AuthorityForm` now only maps content to fields and handles submit.
 - **Also corrected:** layout margins (`margin-inline: auto` centering, `margin-top` spacing) became flex, grid and `gap`. I added that preference to `CLAUDE.md` so later sessions follow it.
 
+### 5. Caught: a problem in my own plan
+- **What happened:** my plan said to draw the spotlight's background photo as a CSS background. While building step 9, the agent saw that the photo was a 1.5 MB PNG shown at only 20% opacity. As a CSS background it would download full size and unoptimized.
+- **What it did:** it stopped and asked before deviating, instead of quietly following the plan or quietly changing it. It offered a decorative `next/image` (`alt=""`), which Next resizes and serves as WebP/AVIF.
+- **Accepted:** I chose `next/image`, and the agent updated `PLAN.md` to match. The `/build-step` rule to "ask when the plan disagrees with what you find" worked as intended.
+
 ## Design token usage
 
 <!-- How did you use the tokens in styles/tokens.css? Any places you had to
@@ -52,7 +57,7 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
   - **Spacing** (`--space-200` … `--space-3000`): the DS has no spacing scale. Names follow Figma's own variable, `cg-spacing-200` = 8px, so a step of 100 is 4px. That also fits the off-grid values the frames use (12, 20, 44).
   - **Line heights** (`--line-height-*`): Figma's text styles pair each font size with a line height the DS doesn't define. Each one is numbered after the `--font-size-*` step it goes with (for example `--line-height-900` = 72px for the 60px display size).
   - **`--letter-spacing-caps`** (1.5px): button labels, from Figma `cg-font-letter_spacing-caps`.
-  - **`--color-background-inverse`** (`#192129`): Figma's Background/Inverse, used for the nav band, the sticky banner and (later) the spotlight panels. The nav band has to match the nav image's edge exactly, so the nearest token (neutral-1000) wasn't an option there, and one token keeps every dark surface consistent.
+  - **`--color-background-inverse`** (`#192129`): Figma's Background/Inverse, used for the nav band, the sticky banner and the spotlight panels. The nav band has to match the nav image's edge exactly, so the nearest token (neutral-1000) wasn't an option there, and one token keeps every dark surface consistent.
   - **`--gradient-brand`**: Figma's Gradient/Blue 5 for primary buttons, from `--color-primary-500` to `#9900e0`. The purple end has no DS token.
   - **`--shadow-sticky-bottom`**: not in the DS or Figma. An upward shadow for the sticky banner (a design decision of mine, see Interaction & UX decisions). Its color is `--color-neutral-900` at 40% through `color-mix()`, so no raw color.
 - **Typography:** [`styles/typography.module.css`](styles/typography.module.css) has one class per Figma text style used on the page (`displayMedium`, `headlineLarge`, `bodyLarge`…). Components pull these in with `composes:`, so no component sets its own font size and line height.
@@ -89,6 +94,8 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
 - **Feature screenshots** all use one 16:9 shape on a padded light panel (`--color-neutral-050`), which reproduces Figma's panel heights at each breakpoint. Figma's insets vary slightly per card. The contract bid screenshot is taller, so it is cropped from the top, as in Figma, and stays the same size as the other two.
 - **Mobile carousel dots use CSS only.** Each card's scroll position drives its dot through CSS scroll-driven animations, so the section stays a server component with no JavaScript. Browsers without support (Firefox today) still swipe and snap but show no dots. The dots are a visual hint only (`aria-hidden`); as links they would have jumped the page and changed the URL. The 37px gap between heading and cards is snapped to 40px (`--space-1000`) on the spacing scale.
 - **The feature list is a keyboard tab stop at every width.** It needs `tabindex="0"` so keyboard users can scroll the mobile carousel, but CSS can't remove that from 960 up, where the cards sit in a grid and don't scroll.
+- **Spotlight media is built from parts, not flattened renders.** Each panel is a `--color-background-inverse` box with the truck-stop photo at 20% opacity and the product screenshot centered on top, so both spotlights share one photo file and reuse the feature screenshots (and their alt text). The photo is decorative (`alt=""`), but it's a `next/image` rather than a CSS background: the source is a 1.5 MB PNG, and `next/image` serves it resized as WebP/AVIF. Panels keep each frame's aspect ratio (328:236, 449:320, 705:461). The screenshot fills 86% of the panel width (89% at 960); Figma's insets differ by a few pixels between the two spotlights.
+- **Spotlight columns scale between frames.** From 960 up, text and media split the row in the frames' own column ratios (351:449 at 960, 439:705 at 1440) with a 72px gap, so the layout stays proportional at widths no frame covers. Below 960 the media always sits above the text, and from 600 to 959 the panel simply grows with its aspect ratio. The heading comes first in the HTML on every layout; CSS `order` moves the media.
 - **Banner copy comes from `content.json`.** The 960 and 360 banner frames say "request a Demo"; the page uses content.json's "Request a demo" (rendered in caps either way).
 
 ## If I had more time
