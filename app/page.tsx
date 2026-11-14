@@ -17,8 +17,9 @@ export default async function Home() {
       <SiteHeader />
       <main>
         <Hero hero={hero} />
+        {/* One divider rule at every width: between every pair of sections (PLAN C8). */}
+        <hr className={styles.divider} />
         <Features features={features} />
-        {/* One divider rule at every width: before each spotlight and before the form (PLAN C8). */}
         {spotlights.map((spotlight, index) => (
           <Fragment key={spotlight.title}>
             <hr className={styles.divider} />
