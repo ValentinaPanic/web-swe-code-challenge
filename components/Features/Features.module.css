@@ -13,7 +13,7 @@
   padding-inline: var(--space-400);
 }
 
-/* Mobile: horizontal scroll-snap carousel. Cards are 85% wide so the next one peeks in (PLAN §5). */
+/* Mobile: horizontal scroll-snap carousel, one full-width card centered in view at a time. */
 .list {
   display: flex;
   align-self: stretch;
@@ -30,9 +30,51 @@
   outline-offset: calc(-1 * var(--border-weight-focus));
 }
 
+/* stop: always, so one swipe moves exactly one card. */
 .item {
-  flex: 0 0 85%;
-  scroll-snap-align: start;
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  view-timeline-axis: inline;
+}
+
+/*
+  Carousel dots. Each dot's animation runs on its card's view timeline, so it
+  turns blue while that card is centered. Hidden where scroll-driven animations
+  aren't supported (all dots would look inactive there).
+*/
+.dots {
+  display: none;
+  justify-content: center;
+  gap: var(--space-200);
+}
+
+@supports (animation-timeline: view()) {
+  .dots {
+    display: flex;
+  }
+}
+
+.dot {
+  width: var(--space-200);
+  height: var(--space-200);
+  border-radius: var(--radius-rounded);
+  background: var(--color-neutral-200);
+  animation: activeDot linear both;
+  animation-range: cover;
+}
+
+/* 50% of the cover range is the card centered in view. */
+@keyframes activeDot {
+  35%,
+  65% {
+    background: var(--color-neutral-200);
+  }
+
+  45%,
+  55% {
+    background: var(--color-primary-500);
+  }
 }
 
 /* Figma: 8px to the text block plus its 16px top padding. */
@@ -42,19 +84,21 @@
   gap: var(--space-600);
 }
 
-/* Screenshot inset on a light panel. Figma's panels are about 8:5 at every breakpoint. */
+/* Screenshot inset on a light panel; the panel's height follows the image. */
 .media {
-  display: flex;
-  aspect-ratio: 8 / 5;
   padding: var(--space-500);
   border-radius: var(--radius-large);
   background: var(--color-neutral-050);
 }
 
-/* Top-anchored crop, as Figma crops the taller contract bid screenshot. */
+/*
+  One fixed shape for every screenshot so the cards match: 16:9 plus the inset
+  gives Figma's panel heights (238 / 182 / 205). The taller contract bid shot is
+  cropped from the top, as in Figma.
+*/
 .image {
   width: 100%;
-  height: 100%;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
   object-position: top;
 }
@@ -100,6 +144,10 @@
 
   .text {
     gap: var(--space-400);
+  }
+
+  .dots {
+    display: none;
   }
 }
 
