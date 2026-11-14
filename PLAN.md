@@ -216,7 +216,7 @@ data/content.json
    - Commit `.claude/settings.json`, the hook script and `CLAUDE.md`: they show how the agent was set up, which counts toward "AI fluency". Decide whether the raw `.jsonl` log is committed or gitignored (it may contain more than reviewers need).
 2. **Scaffold:** run `create-next-app@latest` (TS, ESLint, App Router, no Tailwind, no src dir) into a **temp dir**, then copy the configs in so README and SPEC aren't overwritten. Confirm `strict: true` and add `noUncheckedIndexedAccess`. Delete `index.html` and `script.js`. Confirm a clean `build`. **Done:** Next.js 16.4.6 with React 19.3, which needs Node 20.9 or newer.
 3. **Content contract:** `types/content.ts` mirrors `content.json`; `getContent()` in `lib/content.ts` returns it with one `as Content` assertion; the layout's meta description comes from `hero.subheading`. **Done.** A first version added runtime guards, a generic `Widen<T>` type, 7 `node --test` tests and config changes (`engines`, `"type": "module"`, a tsconfig flag). I removed them on review: they guarded a fixed file in this repo. This led to the "Keep it simple" rules in `CLAUDE.md`.
-4. **Assets (risk: Figma URLs expire in 7 days):** export every image (hero composite, 3 feature shots, 2 spotlight screenshots and backgrounds, gradient SVG, icons). Also export the nav (1440, 960, 360) and footer (1440, 960) at 2x. Give them meaningful names under `assets/images` (for example `nav-1440@2x.png`), and sample the footer's edge color.
+4. **Assets (risk: Figma URLs expire in 7 days):** export every image (hero composite, 3 feature shots, 2 spotlight screenshots and backgrounds, gradient SVG, icons). Also export the nav (1440, 960, 360) and footer (1440, 960) at 2x. Give them meaningful names under `assets/images` (for example `nav-1440@2x.png`), and sample the footer's edge color. **Done:** 14 files in `assets/images` (4.2 MB): nav and footer renders at 2x, the original image fills for the hero, the 3 screenshots and the truck-stop photo, plus SVGs for 2 icons and the hero shapes (Figma's page-background rects stripped). The two spotlights reuse the load board and RateView screenshots over the same photo, so the parts are kept rather than flattened composites. Footer edge `#0a0d10` = `--color-neutral-1000`; nav edge `#192129` (C2).
 5. **Token layer:** extensions, typography module, globals, focus ring. Check them on a scratch section.
 6. **Page shell + sticky behavior (risk: the prototype's main idea):** `ArtDirectedImage`, then the sticky header (nav image), `main`, the sticky `CtaBanner`, and the footer image. Check three things:
    - The right image appears at each breakpoint (look at the Network panel: only one image downloads per breakpoint).
@@ -278,7 +278,7 @@ Framework and rendering, CORS approach, CSS Modules, token-extension strategy, f
 ### Things I'm unsure of (to verify, not guess)
 - The exact 360 type sizes for the hero `h1` and spotlight headings (they appear to be 34/36 and 16/22). Confirm with `get_design_context` when building those sections.
 - The divider color (likely neutral-100 or neutral-200).
-- The footer background color, needed to extend the image edge-to-edge.
+- ~~The footer background color~~ Resolved in step 4: `#0a0d10`, exactly `--color-neutral-1000`.
 - Whether white text on the gradient's purple end passes AA at 10px bold caps.
 
 ---

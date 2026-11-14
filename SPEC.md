@@ -41,6 +41,9 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
 <!-- How did you use the tokens in styles/tokens.css? Any places you had to
      make a judgment call because a token didn't quite fit? -->
 
+- **Nav and footer bands:** the images are centered on a full-width band matching their edge color, sampled from the exports. Footer: `#0a0d10`, exactly `--color-neutral-1000`. Nav: `#192129` (Figma "Background/Inverse"), which isn't in `tokens.css`.
+- **Colors inside SVG assets:** the icon SVGs keep Figma's fills (`#0046E0` = `--color-primary-500`, `#192129` for the check icon) because an `<img>` can't take CSS variables. These are asset files, not component CSS.
+
 ## Interaction & UX decisions
 
 <!-- The design doesn't spell out every interaction. What did you decide,
@@ -55,6 +58,7 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
 - **Scaffold:** Next.js 16 (App Router), React 19, TypeScript in strict mode plus `noUncheckedIndexedAccess`, and ESLint with Next's rules. No Tailwind: the design tokens already exist as CSS variables, and a second styling system would compete with them.
 - **CORS:** the page reads content on the server at build time through `getContent()` ([`lib/content.ts`](lib/content.ts)) and ships it as HTML, so the browser never calls the CMS and no CORS error can occur. Moving to a real CMS means swapping the JSON import for a server-side `fetch` with `revalidate`; call sites don't change. If content ever had to be fetched in the browser, I'd add a same-origin route handler as a proxy rather than loosen CORS on the CMS.
 - **Typed content without zod:** interfaces in [`types/content.ts`](types/content.ts) mirror `content.json`. JSON imports widen string unions (button `variant`, field `type`, `mediaPosition`) to `string`, so `getContent()` asserts the import `as Content`. There's no runtime validation: the content file is fixed for this challenge, so it would guard against a problem I don't have.
+- **Images are local files:** `content.json` has no images, so every image was exported from Figma into [`assets/images`](assets/images) (no expiring figma.com URLs). Screenshots and photos are Figma's original fills, not re-renders. The footer export is Figma's own render, including its App Store badge text overflowing the badge.
 
 ## If I had more time
 
