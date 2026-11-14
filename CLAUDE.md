@@ -69,7 +69,7 @@ than your training data. Commit AGENTS.md if `next dev` rewrites it.)
   Figma frame: 1440px (1:4067), 960+ (1:666) and 360- (1:794).
   The Figma MCP always returns React + Tailwind reference code. Tailwind is NOT
   installed and must not be: read the values from that output (spacing, sizes,
-  colours) and write them as CSS Modules using tokens.
+  colors) and write them as CSS Modules using tokens.
 - Download Figma assets into assets/images immediately; never ship figma.com URLs.
 - After each section: npm run lint && npm run typecheck && npm run build must pass
   with zero warnings, and the browser console must stay empty.
@@ -78,3 +78,5 @@ than your training data. Commit AGENTS.md if `next dev` rewrites it.)
   Never write the "Interaction & UX decisions" reasoning yourself; I write it.
   AI usage lists representative prompts only, not a transcript (that's .claude/ai-log.jsonl).
 - When unsure about a design gap, stop and ask. Don't invent behavior.
+- American English spelling everywhere (color, center, behavior, optimize), in docs,
+  comments and commit messages.

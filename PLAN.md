@@ -72,16 +72,16 @@ This is a take-home for a Senior Web Engineer role at DAT. The task is a "Soluti
 - Server (default): everything except the items below.
 - Client: `AuthorityForm` only (submit interception and the success state need `useState` and an `onSubmit` handler).
 - **Considered and rejected: Server Actions for the form.** There's nowhere to send the data, so the action would be backend code that throws it away. It would also still need a client wrapper (`useActionState`) to show the success message. Record this in SPEC ("Assumptions & trade-offs"), with Server Actions named as the upgrade path once there's a real CRM destination: the API key stays on the server, and the call is server-to-server, so CORS never comes up.
-- No `useEffect` anywhere. The image nav has no hamburger behaviour, so no menu state is needed.
+- No `useEffect` anywhere. The image nav has no hamburger behavior, so no menu state is needed.
 
 **Nav and footer as static images.**
 - Export from Figma at 2x: nav at 1440 (`1:4068`), 960 (`1:667`) and 360 (`1:795`); footer at 1440 (`1:4153`) and 960 (`1:793`).
-- Render with art direction: a `<picture>` element with one `<source media>` per breakpoint. Build it with `getImageProps()` from `next/image` (part of Next, no extra library), so each source still gets optimised `srcset`s and fixed dimensions.
-- **Sizing rule** (the same for every source): show at most the image's own width, centred on a dark full-width background that matches the image's edge colour.
+- Render with art direction: a `<picture>` element with one `<source media>` per breakpoint. Build it with `getImageProps()` from `next/image` (part of Next, no extra library), so each source still gets optimized `srcset`s and fixed dimensions.
+- **Sizing rule** (the same for every source): show at most the image's own width, centered on a dark full-width background that matches the image's edge color.
   - Header height is the same at every width inside a breakpoint (76 / 64 / 64), so `scroll-margin-top` is a simple per-breakpoint value.
   - Between breakpoints the image keeps its size, with dark bands at the sides. Stretching instead would make the nav up to 200px tall at tablet widths.
   - Exception: the 960 footer image shrinks to fit below 960 (see C15).
-- Background colours: the nav band is `#192129` (Figma `fill-navigation-default`, the same gap as C2). The footer band colour gets sampled from the export, mapped to the nearest token and recorded in SPEC.
+- Background colors: the nav band is `#192129` (Figma `fill-navigation-default`, the same gap as C2). The footer band color gets sampled from the export, mapped to the nearest token and recorded in SPEC.
 - The header stays sticky as the prototype shows: `position: sticky; top: 0` around the image.
 
 **Styling.**
@@ -216,7 +216,7 @@ data/content.json
    - Commit `.claude/settings.json`, the hook script and `CLAUDE.md`: they show how the agent was set up, which counts toward "AI fluency". Decide whether the raw `.jsonl` log is committed or gitignored (it may contain more than reviewers need).
 2. **Scaffold:** run `create-next-app@latest` (TS, ESLint, App Router, no Tailwind, no src dir) into a **temp dir**, then copy the configs in so README and SPEC aren't overwritten. Confirm `strict: true` and add `noUncheckedIndexedAccess`. Delete `index.html` and `script.js`. Confirm a clean `build`. **Done:** Next.js 16.4.6 with React 19.3, which needs Node 20.9 or newer.
 3. **Content contract:** `types/content.ts` mirrors `content.json`; `getContent()` in `lib/content.ts` returns it with one `as Content` assertion; the layout's meta description comes from `hero.subheading`. **Done.** A first version added runtime guards, a generic `Widen<T>` type, 7 `node --test` tests and config changes (`engines`, `"type": "module"`, a tsconfig flag). I removed them on review: they guarded a fixed file in this repo. This led to the "Keep it simple" rules in `CLAUDE.md`.
-4. **Assets (risk: Figma URLs expire in 7 days):** export every image (hero composite, 3 feature shots, 2 spotlight screenshots and backgrounds, gradient SVG, icons). Also export the nav (1440, 960, 360) and footer (1440, 960) at 2x. Give them meaningful names under `assets/images` (for example `nav-1440@2x.png`), and sample the footer's edge colour.
+4. **Assets (risk: Figma URLs expire in 7 days):** export every image (hero composite, 3 feature shots, 2 spotlight screenshots and backgrounds, gradient SVG, icons). Also export the nav (1440, 960, 360) and footer (1440, 960) at 2x. Give them meaningful names under `assets/images` (for example `nav-1440@2x.png`), and sample the footer's edge color.
 5. **Token layer:** extensions, typography module, globals, focus ring. Check them on a scratch section.
 6. **Page shell + sticky behavior (risk: the prototype's main idea):** `ArtDirectedImage`, then the sticky header (nav image), `main`, the sticky `CtaBanner`, and the footer image. Check three things:
    - The right image appears at each breakpoint (look at the Network panel: only one image downloads per breakpoint).
@@ -277,8 +277,8 @@ Framework and rendering, CORS approach, CSS Modules, token-extension strategy, f
 
 ### Things I'm unsure of (to verify, not guess)
 - The exact 360 type sizes for the hero `h1` and spotlight headings (they appear to be 34/36 and 16/22). Confirm with `get_design_context` when building those sections.
-- The divider colour (likely neutral-100 or neutral-200).
-- The footer background colour, needed to extend the image edge-to-edge.
+- The divider color (likely neutral-100 or neutral-200).
+- The footer background color, needed to extend the image edge-to-edge.
 - Whether white text on the gradient's purple end passes AA at 10px bold caps.
 
 ---
@@ -301,7 +301,7 @@ Each SPEC section, what the template asks, and where the plan already supplies t
 
 ### Design token usage
 *Asks:* how the tokens were used, and where one didn't quite fit.
-- **Approach:** `tokens.css` untouched; `tokens.extensions.css` holds only the gaps; a typography module mirrors the Figma text styles; the hex grep check (§8) proves no raw colours in components.
+- **Approach:** `tokens.css` untouched; `tokens.extensions.css` holds only the gaps; a typography module mirrors the Figma text styles; the hex grep check (§8) proves no raw colors in components.
 - **Judgment calls to list** (from §2):
   - C1 font and weight mapping.
   - C2 `#192129` → neutral-1000.
@@ -309,8 +309,8 @@ Each SPEC section, what the template asks, and where the plan already supplies t
   - C4 spacing, line-height and letter-spacing scales.
   - C5 radius naming trap.
   - C10 the 29px gap snapped to 24px.
-  - C14 no error colour, so native validation messages.
-  - The nav band and footer band background colours.
+  - C14 no error color, so native validation messages.
+  - The nav band and footer band background colors.
 
 ### Interaction & UX decisions *(written by me)*
 *Asks:* what I decided where the design is silent, and why. Source material is in §5; I write the reasoning.

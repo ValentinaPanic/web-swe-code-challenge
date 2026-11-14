@@ -12,7 +12,7 @@
 > "TASK: plan only. Write no code and install nothing. Read CHALLENGE.md first and treat its evaluation criteria as the bar for every decision. Then examine the Figma file … Look at every frame and breakpoint, including the prototype frame. … Where you're unsure, say so instead of guessing."
 
 - **Why I prompted it this way:** scoped to planning so I could review the approach before any code existed. Tied every decision to the grading criteria, and named the prototype frame explicitly because interaction details tend to live there.
-- **What came back:** a plan ([`PLAN.md`](PLAN.md)) with 16 numbered conflicts between Figma, `content.json` and `tokens.css`. It found the prototype's sticky nav and sticky "Get started today" banner, mobile feature copy that differs from `content.json`, and colours missing from the tokens.
+- **What came back:** a plan ([`PLAN.md`](PLAN.md)) with 16 numbered conflicts between Figma, `content.json` and `tokens.css`. It found the prototype's sticky nav and sticky "Get started today" banner, mobile feature copy that differs from `content.json`, and colors missing from the tokens.
 - **Accepted:** the folder structure and component split.
 - **Adjusted:** the plan built the nav in HTML. I changed it to static images first, since the brief allows it and the evaluation focuses on what sits between the nav and footer. HTML nav and footer became an optional last step.
 - **Rejected:** I asked what would change if the form used Server Actions. With nowhere to send the data, it would add backend code with no purpose, so the form stays the only client component.
