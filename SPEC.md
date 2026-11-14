@@ -36,6 +36,13 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
 - **Root cause, not just the symptom:** my own plan had asked for guards and tests, and nothing told the agent to push back on a plan heavier than its goal. I added a "Keep it simple" section to `CLAUDE.md`: least code for the goal, no single-use abstractions, no runtime checks on repo files, no config changes to make an approach work. `/build-step` now states the simplest version before coding, and reviews its own diff before committing.
 - **Second trap found while fixing the first:** I'd declined the `AGENTS.md` that `create-next-app` offers. Next 16 uses it to point agents at docs matching the installed version (`node_modules/next/dist/docs/`), and `next dev` re-creates it whenever it detects an AI agent. Claude Code reads only `CLAUDE.md`, so I committed Next's generated `AGENTS.md` and imported it into `CLAUDE.md` with `@AGENTS.md`.
 
+### 4. Adjusted: "used once" is the wrong test for form fields
+> "We want DRY code, imagine that this is the full DAT website. On the full website there are most likely multiple forms used across the site. I need you to break down the AuthorityForm."
+
+- **What came back first:** following the "no abstraction for a single use" rule, the agent had drawn every input, select and checkbox inline in one `AuthorityForm`, because each pattern appears only on this page.
+- **Adjusted:** this page is one segment page of a large marketing site with many forms. The agent split out a shared `Field` (bordered box and floating label, written once), with `TextField`, `SelectField` and `CheckboxGroup` on top. They take plain props rather than the CMS field shape, so any form can use them, and `AuthorityForm` now only maps content to fields and handles submit.
+- **Also corrected:** layout margins (`margin-inline: auto` centering, `margin-top` spacing) became flex, grid and `gap`. I added that preference to `CLAUDE.md` so later sessions follow it.
+
 ## Design token usage
 
 <!-- How did you use the tokens in styles/tokens.css? Any places you had to
@@ -47,6 +54,7 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
   - **`--letter-spacing-caps`** (1.5px): button labels, from Figma `cg-font-letter_spacing-caps`.
   - **`--color-background-inverse`** (`#192129`): Figma's Background/Inverse, used for the nav band, the sticky banner and (later) the spotlight panels. The nav band has to match the nav image's edge exactly, so the nearest token (neutral-1000) wasn't an option there, and one token keeps every dark surface consistent.
   - **`--gradient-brand`**: Figma's Gradient/Blue 5 for primary buttons, from `--color-primary-500` to `#9900e0`. The purple end has no DS token.
+  - **`--shadow-sticky-bottom`**: not in the DS or Figma. An upward shadow for the sticky banner (a design decision of mine, see Interaction & UX decisions). Its color is `--color-neutral-900` at 40% through `color-mix()`, so no raw color.
 - **Typography:** [`styles/typography.module.css`](styles/typography.module.css) has one class per Figma text style used on the page (`displayMedium`, `headlineLarge`, `bodyLarge`…). Components pull these in with `composes:`, so no component sets its own font size and line height.
 - **Font (judgment call):** Figma uses Sequel Sans, a licensed font with in-between weights. The page uses the DS system stack, mapped as Book → regular, Bold → bold and Black → black. Line breaks can differ slightly from Figma.
 - **Text color (judgment call):** Figma's Text/Primary (`#192129`) isn't in the DS. Body text uses `--color-neutral-1000`, which looks the same at text sizes.
@@ -60,8 +68,10 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
 
 - **Focus states.** Every interactive element shows a 4px focus ring (`--border-weight-focus`) only for keyboard users (`:focus-visible`), so mouse clicks don't leave rings behind. On dark surfaces like the "Get started today" banner, the ring switches to the lighter `--color-primary-200`. That stays visible against the dark background and is a little closer to the focus style on the live DAT site. All buttons share the same pill-shaped ring, so focus looks the same whichever button you land on.
 - **Hover states.** Most calls to action darken slightly on hover. I prefer this because it gives clear feedback without changing the button's color or shape. The gradient can't be animated directly, so a dark layer fades in over it. The ghost button ("Learn more") has no background to darken, so it gets an underline instead, which is easy to see on the dark banner.
-- **Sticky header and banner in CSS only.** The prototype pins the nav to the top and the "Get started today" banner to the bottom. Both use `position: sticky`, with no JavaScript, scroll listeners or client component: they work before any script loads, and there's nothing that can break or fall out of sync. From 960px up, the banner settles above the footer on its own once you reach the end of the page. Below 960px it's a regular section at the end of the page for now (see Assumptions & trade-offs).
+- **Sticky header and banner in CSS only.** The prototype pins the nav to the top and the "Get started today" banner to the bottom. Both use `position: sticky`, with no JavaScript, scroll listeners or client component: they work before any script loads, and there's nothing that can break or fall out of sync. The banner stays pinned at every width, even while the footer scrolls past. It's the last element on the page, so at the very end it comes to rest below the footer instead of covering it.
 - **Mobile button order follows Figma.** On phones the banner stacks "Request a demo" above "Learn more", as in the 360 frame. "Request a demo" is the punchier action, so it belongs on top. The HTML keeps `content.json`'s order (Learn more, then Request a demo), which matches desktop, so on mobile the keyboard and screen-reader order runs bottom to top. With two adjacent buttons, I accepted that small mismatch.
+- **Banner shadow (my addition, not in Figma).** The pinned banner casts a soft shadow upward so it reads as a layer above the page while content scrolls underneath. A shadow can't show on the near-black footer, so a 1px lighter top edge (`--color-neutral-700`) keeps the banner visually separate there too.
+- **Checkboxes in a row on mobile (my addition, not in Figma).** The 360 frame stacks the three "Authority Needed?" options in a column. Three short labels fit on one row even at 360px, and the column left a lot of white space that took away from the view. They wrap onto a second line only on very narrow screens.
 
 ## Assumptions & trade-offs
 
@@ -75,7 +85,6 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
 - **Images are local files:** `content.json` has no images, so every image was exported from Figma into [`assets/images`](assets/images) (no expiring figma.com URLs). Screenshots and photos are Figma's original fills, not re-renders. The footer export is Figma's own render, including its App Store badge text overflowing the badge.
 - **Nav and footer are static images**, as the brief allows. Each is a `<picture>` with one Figma render per breakpoint (nav: 360, 960, 1440; footer: 960, 1440), built with Next's `getImageProps()` so only the matching image downloads, in optimized 1x/2x versions. Each image shows at its design width, centered on a full-width band in its edge color, so it never stretches. There's no `<nav>` landmark while the nav is a picture with no links. No 360 footer exists, so the 960 footer scales down on phones and its small text gets hard to read.
 - **Banner copy comes from `content.json`.** The 960 and 360 banner frames say "request a Demo"; the page uses content.json's "Request a demo" (rendered in caps either way).
-- **Sticky banner on mobile (provisional):** the "Get started today" banner is sticky from 960px up, as in the prototype. Below 960px it is a regular section at the end of the page for now. I'll revisit this before the final submission.
 
 ## If I had more time
 

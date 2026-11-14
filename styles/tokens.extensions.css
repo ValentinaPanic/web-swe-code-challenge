@@ -40,6 +40,8 @@
 
   /* Not in DS: from Figma cg-font-letter_spacing-caps (button labels). */
   --letter-spacing-caps: 1.5px;
+  /* Not in DS: from the Figma form submit button's detached text style (0.6px). */
+  --letter-spacing-submit: 0.6px;
 
   /*
     Not in DS: from Figma Background/Inverse (nav bar, sticky banner, spotlight
@@ -49,4 +51,10 @@
 
   /* Not in DS: from Figma Gradient/Blue 5 (primary buttons). The purple end has no token. */
   --gradient-brand: linear-gradient(90deg, var(--color-primary-500), #9900e0);
+
+  /*
+    Not in DS or Figma (design decision): upward shadow that separates the
+    sticky banner from the content scrolling under it, including the dark footer.
+  */
+  --shadow-sticky-bottom: 0 -4px 16px color-mix(in srgb, var(--color-neutral-900) 40%, transparent);
 }

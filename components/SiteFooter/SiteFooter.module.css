@@ -1,8 +1,6 @@
 /* The footer image's edge color is exactly neutral-1000 (sampled in step 4). */
 .footer {
+  display: flex;
+  justify-content: center;
   background: var(--color-neutral-1000);
-}
-
-.image {
-  margin-inline: auto;
 }

@@ -6,7 +6,7 @@ import styles from './SiteHeader.module.css';
 export function SiteHeader() {
   return (
     <header className={styles.header}>
-      <ArtDirectedImage {...navImage} loading="eager" className={styles.image} />
+      <ArtDirectedImage {...navImage} loading="eager" />
     </header>
   );
 }

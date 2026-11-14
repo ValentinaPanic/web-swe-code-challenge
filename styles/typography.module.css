@@ -90,6 +90,30 @@
   }
 }
 
+/* Form heading: Headline Small/Black, Headline Large/Strong from 960. */
+.formHeading {
+  font-size: var(--font-size-400);
+  line-height: var(--line-height-400);
+  font-weight: var(--font-weight-black);
+}
+
+@media (min-width: 960px) {
+  .formHeading {
+    font-size: var(--font-size-600);
+    line-height: var(--line-height-600);
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+/* Form submit: a detached Figma style, 12/22 caps with tighter tracking (PLAN C9). */
+.submitLabel {
+  font-size: var(--font-size-100);
+  line-height: var(--line-height-300);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-submit);
+  text-transform: uppercase;
+}
+
 /* Figma has no named style for buttons; this is the shared 10/16 caps label. */
 .button {
   font-size: var(--font-size-050);

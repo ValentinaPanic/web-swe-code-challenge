@@ -5,7 +5,7 @@ import styles from './SiteFooter.module.css';
 export function SiteFooter() {
   return (
     <footer className={styles.footer}>
-      <ArtDirectedImage {...footerImage} className={styles.image} />
+      <ArtDirectedImage {...footerImage} />
     </footer>
   );
 }

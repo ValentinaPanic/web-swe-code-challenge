@@ -49,8 +49,8 @@ This is a take-home for a Senior Web Engineer role at DAT. The task is a "Soluti
 | C6 | **Mobile feature copy differs**. At 360, cards 1 and 2 say "Evaluate bids using embedded RateView insights…" and "Make & send awards…". Card 3 matches the desktop copy. | `content.json` wins: one content source across breakpoints. The 360 copy looks like stale design copy. | Yes |
 | C7 | **Inconsistent mobile card type**. At 360, cards 1 and 2 use 16/22 titles with 14/20 body, while card 3 uses 20/24 with 16/22. | Use 16/22 + 14/20 for all mobile cards (the majority, and consistent). | No |
 | C8 | **Divider lines vary by breakpoint**. 1440: under hero, spot1/spot2, spot2/form. 960: features/spot1, spot2/form. 360: features/spot1, spot1/spot2, spot2/form. | Use one rule at all sizes: dividers between features, spot1, spot2 and form (the 360 set). Inset per breakpoint from the frames (62 / 48 / 16 px). | Low |
-| C9 | **Submit button** is a detached style: solid `#0046e0`, 12px, 0.6px tracking, full width. Every other primary button uses the gradient at 10px with 1.5px caps tracking. | Match Figma through the shared `Button` with a `solid` variant and `block` width. | Low |
-| C10 | **Form row gap is 29px** (the rest of the file sits on an 8px grid). | Use `--space-600` (24px; spacing names follow Figma's `cg-spacing-200` = 8, so 100 = 4px). Likely a nudge in Figma, and the 5px difference is below what reviewers would notice. | No |
+| C9 | **Submit button** is a detached style: solid `#0046e0`, 12px, 0.6px tracking, full width. Every other primary button uses the gradient at 10px with 1.5px caps tracking. | Match Figma with a plain `<button>` styled in `AuthorityForm` plus a `submitLabel` typography class (decided in step 7: it's used once, and its type, tracking and fill share almost nothing with `Button`). | Low |
+| C10 | **Form row gap is 29px** (the rest of the file sits on an 8px grid). The form section's vertical padding is also 76px at 960 but 72px at 1440. | Use `--space-600` (24px; spacing names follow Figma's `cg-spacing-200` = 8, so 100 = 4px) for the gap, and `--space-1800` (72px) for the padding from 960 up. Likely nudges in Figma, and 4–5px is below what reviewers would notice. | No |
 | C11 | **Select options are missing** (Company Type, State, Transportation Role). | `lib/formOptions.ts` with US states + DC, plus clearly labelled placeholder options for the other two. | Yes |
 | C12 | **"Authority Needed?"** is drawn as square checkboxes, but the legend reads like a single choice. | Use checkboxes as designed, inside `fieldset`/`legend`. Multiple answers are plausible. | Yes |
 | C13 | **No images in content.json**, though the design has a hero composite, 3 feature screenshots and 2 spotlight media panels. | Keep a local `lib/media.ts` keyed by section and index, and merge it in the loader so components get `{ src, alt }`. A real CMS would send these. | Yes (FYI) |
@@ -107,11 +107,15 @@ components/
   Hero/                 server
   Features/             server  Features + FeatureCard
   Spotlight/            server
-  AuthorityForm/        client  form + TextField, SelectField, CheckboxGroup
+  AuthorityForm/        client  section + form; composes the shared field components below
   CtaBanner/            server  sticky bottom <aside>
   SiteFooter/           server  <footer> + art-directed <picture> (static image for now)
   ui/ArtDirectedImage/  server  getImageProps() -> <picture>; shared by header and footer (DRY)
   ui/Button/            server  <a> when href, else <button>
+  ui/Field/             server  bordered box + floating label shared by TextField and SelectField
+  ui/TextField/         server  <input> in a Field
+  ui/SelectField/       server  <select> in a Field
+  ui/CheckboxGroup/     server  fieldset + legend + custom-drawn checkboxes
   ui/Section/           server  <section> + container + optional divider
 lib/
   content.ts            getContent(): Promise<Content>
@@ -135,18 +139,21 @@ data/content.json
 - `Content`: mirrors the JSON exactly.
 
 **Component props:**
-- `Button`: `{ variant; href?; type?; block?; children }`
+- `Button`: `{ variant; href; className?; children }` (links only for now; primary and ghost styled. Other variants and a `<button>` branch wait for a real second use)
 - `Section`: `{ id?; labelledBy; divider?; className?; children }`
 - `Hero`: `{ hero; media }`
 - `Features`: `{ heading; items; media[] }`
 - `FeatureCard`: `{ item; media }`
 - `Spotlight`: `{ spotlight; media; headingId }`
-- `AuthorityForm`: `{ form; options }` (passed serializable data only)
-- `TextField` and `SelectField`: `{ field; options? }`
+- `AuthorityForm`: `{ form }` (it imports `lib/formOptions.ts` directly)
+- `Field`: `{ id; label; required?; children }` (children = the control)
+- `TextField`: `{ id; name; label; type?; required?; autoComplete? }`
+- `SelectField`: `{ id; name; label; options; required?; autoComplete? }`
 - `CheckboxGroup`: `{ legend; name; options }`
+- Field components take plain props, not the CMS `FormField` shape, so any form on the site can use them (DRY across a full DAT site, decided after step 7).
 - `CtaBanner`: `{ cta }`
 - `SiteHeader` and `SiteFooter`: no props for now (images come from `lib/media.ts`). They take `{ nav }` and `{ footer }` if step 13 happens.
-- `ArtDirectedImage`: `{ alt; base; at960?; at1440?; loading?; className? }` (simplified in step 6 from a generic `sources[]`: the breakpoints are fixed project-wide)
+- `ArtDirectedImage`: `{ alt; base; at960?; at1440?; loading? }` (simplified in step 6 from a generic `sources[]`: the breakpoints are fixed project-wide)
 
 ---
 
@@ -164,12 +171,12 @@ data/content.json
 | Hero | Stack: text → callout (CTA full width) → image | 2 columns (text + 544/405px image), CTA inline in callout |
 | Features | **Horizontal scroller**: CSS `overflow-x: auto` + `scroll-snap`, 328px cards with 40px gap. **Deviation:** cards are 85% wide so the next one peeks; Figma's 100% gives no hint that more cards exist. Left-aligned 20/24 heading. | 3 equal columns, centered 34/36 heading |
 | Spotlights | Media first, then text, for both | Side by side with a 72px gap; `mediaPosition` sets which side |
-| Form | 1 column, checkboxes stacked | 2 columns, checkboxes inline (32px gap) |
-| CTA banner | **Not sticky:** a regular section at the end of the page, stacked, full-width buttons (primary first, as in the 360 frame). Provisional; revisit before final (Q5). | Sticky. Row: text left, buttons right |
+| Form | 1 column, checkboxes inline and wrapping (my preference; Figma stacks them) | 2 columns, checkboxes inline (32px gap) |
+| CTA banner | Sticky, with an upward shadow and a 1px top edge (my preference, not in Figma). Stacked, full-width buttons (primary first, as in the 360 frame). | Sticky, same shadow and edge. Row: text left, buttons right |
 
 **Sticky behavior (from the prototype annotations).**
 - The header is `position: sticky; top: 0`.
-- `CtaBanner` is placed between `<main>` and `<footer>`. From 960px up it is `position: sticky; bottom: 0`: it pins to the viewport bottom, then settles into the flow above the footer. **Zero JS.** Below 960px it is a regular section at the end of the page (provisional decision, revisit before final; see Q5).
+- `CtaBanner` is placed after `<footer>`, as the last element on the page. At every width it is `position: sticky; bottom: 0`, so it stays pinned to the viewport bottom the whole way down, footer included, and at the very end it sits below the footer instead of covering it. **Zero JS.** (Q5 decided: sticky on mobile too.)
 - Anchor targets get `scroll-margin-top` equal to the nav height, so the form heading isn't hidden under the header.
 
 **Hover, focus and motion** (I'll explain these in SPEC in my own words):
@@ -221,10 +228,10 @@ data/content.json
 6. **Page shell + sticky behavior (risk: the prototype's main idea):** `ArtDirectedImage`, then the sticky header (nav image), `main`, the sticky `CtaBanner`, and the footer image. Check three things:
    - The right image appears at each breakpoint (look at the Network panel: only one image downloads per breakpoint).
    - The header stays pinned while scrolling.
-   - From 960px up, the banner pins to the bottom and then settles above the footer. Below 960px it sits in the flow at the end of the page.
+   - The banner pins to the bottom (from 960px up at first; after step 7 made sticky at every width and moved after the footer so it stays pinned while the footer scrolls past).
 
    **Done:** `ArtDirectedImage` (`getImageProps` → `<picture>`, @2x exports shown at half width with 1x/2x srcsets), a sticky `SiteHeader`, a `CtaBanner` (an `aside`, sticky from 960px up, built from the separate banner frames 32:2352 / 1:1334 / 1:1341), a `SiteFooter`, a link-only `Button` (primary and ghost; the other variants and `<button>` wait for the steps that need them), `lib/media.ts` for nav and footer, plus `--color-background-inverse`, `--gradient-brand` and a `bannerHeading` role class.
-7. **AuthorityForm (highest interaction risk):** fields, floating labels (including selects), validation, no-reload submit, success state, two- to one-column layout.
+7. **AuthorityForm (highest interaction risk):** fields, floating labels (including selects), validation, no-reload submit, success state, two- to one-column layout. **Done:** a client `AuthorityForm` composed from shared `ui/Field`, `ui/TextField`, `ui/SelectField` and `ui/CheckboxGroup` (split out after review for reuse across site forms; 8 fields from `content.json`, CSS-only floating labels that shrink with `transform: scale` so no new type sizes, a custom-drawn checkbox `fieldset`, consent tied to submit with `aria-describedby`, native validation, `preventDefault` + `reset()`, and an always-present `role="status"` message), `lib/formOptions.ts`, the dropdown-arrow and checkbox-checked icons from Figma, a `formHeading` role class, a `submitLabel` class and `--letter-spacing-submit`.
 8. **Features (risk: mobile scroller):** grid ↔ scroll-snap, keyboard scrolling.
 9. **Spotlight:** media composition (dark panel, 20% photo, inset screenshot), `mediaPosition`, mobile stacking.
 10. **Hero:** gradient background (defined as a token in `tokens.extensions.css`, no SVG), callout, image, three type sizes.
@@ -269,7 +276,7 @@ The agent rules live in [`CLAUDE.md`](CLAUDE.md), the only copy. (This section u
 2. **Mobile feature copy** in the 360 frame ("Evaluate bids…", "Make & send awards") differs from content.json. Is content.json canonical?
 3. **Select options** for Company Type, State (US only, or US + Canada?) and Transportation Role.
 4. **"Authority Needed?"**: multi-select checkboxes as drawn, or a single choice (radio)?
-5. **Sticky banner on mobile** is 236px tall (about 35% of a phone screen). Keep it sticky on mobile, make it dismissible, or hide it when the form is in view? **Provisional decision (mine):** below 960px it's a regular section at the end of the page. Revisit before the final submission.
+5. **Sticky banner on mobile** is 236px tall (about 35% of a phone screen). Keep it sticky on mobile, make it dismissible, or hide it when the form is in view? **Decided:** sticky at every width, as in the prototype.
 6. **Footer on mobile:** there's no 360 footer, so the 960 footer image is scaled down on phones. Is that acceptable for a placeholder? (If I get to the optional HTML nav: should the hamburger open a menu, given that no open state is designed?)
 7. **Submit button** styling (solid, 12px) differs from the shared primary button. Is that intentional?
 8. **Success state:** is there preferred confirmation copy after submit?
@@ -318,7 +325,7 @@ Each SPEC section, what the template asks, and where the plan already supplies t
 - Focus ring: token, keyboard-only, contrast on dark surfaces.
 - Hover per button variant, and **no hover on non-clickable cards**.
 - Reduced motion.
-- Sticky header and banner from the prototype, done in CSS only; banner not sticky below 960px (provisional).
+- Sticky header and banner from the prototype, done in CSS only, at every width.
 - Mobile feature scroller with a peek (a deviation from Figma).
 - Floating labels (real `<label>`s, not placeholders).
 - Native validation, no reload on submit, success message.
@@ -337,7 +344,6 @@ Each SPEC section, what the template asks, and where the plan already supplies t
 - **Checkboxes** kept for "Authority Needed?" (C12).
 - **Breakpoints:** 960 and 1440; the mobile layout continues through the undesigned 600–959 range.
 - **New tokens in `tokens.extensions.css`**, each listed once it's defined: the nav and footer band colors (step 6) and the hero background gradient (step 10).
-- **Sticky banner on mobile:** a regular end-of-page section below 960px. Provisional; revisit before final (Q5).
 - **Testing kept small:** no Playwright or React Testing Library.
 - **Hiring manager:** list which questions (§10) were answered, and how.
 
@@ -348,6 +354,5 @@ Each SPEC section, what the template asks, and where the plan already supplies t
 - Real CMS fetch with `revalidate`, typed images and alt text coming from the CMS.
 - Visual regression (Playwright screenshots at 360, 960 and 1440 against the Figma exports) and automated a11y checks (axe in CI).
 - Custom inline error messages once the design system has error tokens.
-- Sticky banner on mobile: final decision pending Q5 (currently a regular end-of-page section below 960px).
 - A designed tablet breakpoint.
 - Self-hosting Sequel Sans if licensed, to close the font gap.

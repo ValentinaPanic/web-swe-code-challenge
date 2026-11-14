@@ -53,6 +53,8 @@ than your training data. Commit AGENTS.md if `next dev` rewrites it.)
   Values missing from the DS go in styles/tokens.extensions.css with a comment
   naming the Figma source, and an entry in SPEC.md "Design token usage".
 - Trap: Figma "radius large" (72) = --radius-rounded. tokens --radius-large is 8.
+- Layout with flex/grid and gap, not margins (no margin-inline: auto centering,
+  no margin-top spacing). margin: 0 resets are fine.
 - Mobile-first. Breakpoints are literal: @media (min-width: 960px) and (min-width: 1440px).
 - Every interactive element needs a :focus-visible style. Motion only inside
   prefers-reduced-motion: no-preference.
