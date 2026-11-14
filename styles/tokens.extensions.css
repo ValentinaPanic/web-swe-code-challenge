@@ -55,11 +55,13 @@
   /*
     Not in DS: from the Figma hero "gradient" frame, two primary-100 shapes
     blurred by 175px off the top-left and bottom-right corners. Two radial
-    gradients draw the same glow without shipping the SVG.
+    gradients draw the same glow without shipping the SVG. Sizes and strengths
+    were fitted to Figma's rendered 1440 and 960 frames; the blur never reaches
+    full primary-100, and the middle of the section stays white.
   */
   --gradient-hero:
-    radial-gradient(700px 600px at 0 0, var(--color-primary-100), transparent),
-    radial-gradient(700px 600px at 100% 100%, var(--color-primary-100), transparent);
+    radial-gradient(480px 520px at 0 0, color-mix(in srgb, var(--color-primary-100) 80%, transparent), transparent),
+    radial-gradient(500px 520px at 100% 100%, color-mix(in srgb, var(--color-primary-100) 75%, transparent), transparent);
 
   /*
     Not in DS or Figma (design decision): upward shadow that separates the
