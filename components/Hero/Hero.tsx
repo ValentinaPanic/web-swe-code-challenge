@@ -34,6 +34,7 @@ export function Hero({ hero }: { hero: HeroContent }) {
           src={heroImage.src}
           alt={heroImage.alt}
           loading="eager"
+          fetchPriority="high"
           sizes="(min-width: 1440px) 544px, (min-width: 960px) 43vw, 100vw"
           className={styles.image}
         />

@@ -20,8 +20,9 @@ export function SelectField({ id, name, label, options, required, autoComplete }
         defaultValue=""
         className={fieldStyles.control}
       >
-        {/* Empty first option: the label stays inside until a real choice is made. */}
-        <option value="" />
+        {/* Blank first option keeps the label inside until a real choice is made.
+            HTML forbids an empty option without a label, so it gets a space. */}
+        <option value="" label=" " />
         {options.map((option) => (
           <option key={option}>{option}</option>
         ))}

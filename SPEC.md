@@ -24,7 +24,7 @@ Long sessions build up stale context and cost more tokens, so I run each build s
 1. Read `CLAUDE.md` and the relevant parts of `PLAN.md`, and check the branch and git state.
 2. Pick the next step: the first one in `PLAN.md` without a `**Done:**` marker.
 3. Restate the step and its scope before coding, and stop to ask if `PLAN.md` disagrees with the repo or Figma.
-4. Build only that step, then run lint, typecheck, tests and build with zero warnings.
+4. Build only that step, then run lint, typecheck and build with zero warnings.
 5. Mark the step Done, draft the SPEC update (but leave interaction reasoning to me), make one commit, and stop.
 
 - **Design choice:** the skill holds only the process. Rules stay in `CLAUDE.md`, and step details stay in `PLAN.md`, so nothing is duplicated and the skill doesn't go stale as the plan changes.
@@ -101,7 +101,28 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
 - **Hero columns scale between frames**, like the spotlights: from 960 up, text and image split the row 435:405 (960) and 624:544 (1440). The callout ("Need your authority?") is a paragraph with a bold first line, not a heading, because it's a promo line rather than a section. The product image loads eagerly because it is the largest element above the fold on desktop (Next 16 replaces `priority` with `loading="eager"`).
 - **One divider rule at every width.** Figma's dividers differ per frame (1440 has one under the hero, 960 has none between the spotlights). The page uses a line between every pair of sections at every width: the 360 set, plus the 1440 frame's line under the hero. They're 1px `--color-neutral-200` (Figma's `#C7CFD6`, an exact DS match), inset 16 / 48 / 64px. Figma's 62px inset at 1440 is snapped to 64 on the spacing scale. Wider than 1440 the line stops at its 1440 length and stays centered, so it keeps the same overhang past the 1216px content. They're plain `<hr>` elements, because each one marks a change of topic.
 - **Banner copy comes from `content.json`.** The 960 and 360 banner frames say "request a Demo"; the page uses content.json's "Request a demo" (rendered in caps either way).
+- **Static generation, not SSR.** The page uses no request-time data, so Next prerenders it to HTML at build time (○ in the build output). Every component is a Server Component except `AuthorityForm`, which needs state for its success message. There's no `useEffect` and no client-side fetching anywhere, so there are no loading states and no race conditions.
+- **No Server Action for the form.** With nowhere to send the data, a Server Action would be backend code that throws the data away, and it would still need client state to show the success message. Once there's a real CRM, a Server Action is the upgrade path: the API key stays on the server, and the call is server-to-server, so CORS never comes up.
+- **Form placeholders.** Neither Figma nor `content.json` lists the select options. "State" lists the 50 US states plus DC. "Company Type" and "Transportation Role" use short placeholder lists in [`lib/formOptions.ts`](lib/formOptions.ts). The success message ("Thanks! We'll be in touch soon.") is placeholder copy too, since the design shows no success state.
+- **"Authority Needed?" stays as checkboxes**, as drawn, inside a `fieldset` with a `legend`. A broker could plausibly need more than one authority type.
+- **The submit button matches Figma's own style** (solid `--color-primary-500`, 12px label), not the shared gradient button. Figma draws it as a one-off, so it's a plain `<button>` styled in the form rather than another `Button` variant.
+- **Breakpoints are 960 and 1440**, as in the frames. Below 960 the 360 layout continues up to 959px, since no tablet frame exists; the form is capped at its 576px desktop width.
+- **Testing kept small.** No unit or browser test suite: it's a static page whose content file is fixed. The QA pass ran once, by hand:
+  - Lint, typecheck and build are clean. The only client component is `AuthorityForm`, and no component CSS has a raw hex value.
+  - Headless Chrome at 320, 360, 600, 960, 1280, 1440 and 1920: no horizontal overflow, no broken images, an empty console. One `h1`, every `section` labelled by a heading that exists, every image has `alt`, and every control has a label.
+  - The hero CTA scrolls the form heading to just below the sticky nav. An empty submit shows native messages with no reload. A valid submit shows the success message, clears the form and leaves the URL unchanged.
+  - Lighthouse (mobile): Accessibility 100, Best Practices 100, SEO 100, Performance 97.
+- **W3C validation.** The built HTML passes the Nu HTML Checker with no HTML errors. The checker reports seven CSS errors, all for the scroll-driven animation properties behind the carousel dots (`timeline-scope`, `view-timeline-name`, `animation-timeline`). Those properties are in the CSS Scroll-driven Animations spec and ship in Chrome and Safari; the checker's CSS grammar doesn't include them yet. The info notes are about React's `<img />` syntax, which has no effect.
+- **No favicon.** The design has none, and inventing a DAT mark felt wrong for a page shown to stakeholders. An empty icon declared in the metadata stops the browser's `/favicon.ico` request, which would otherwise be the only console error. A real icon is one file away (`app/icon.png`).
 
 ## If I had more time
 
 <!-- Anything you'd change, refactor, or add. -->
+
+- **Build the nav and footer in HTML** from `content.json`, with a real `<nav>` landmark, `aria-current` on the current page, a mobile menu, and a footer that's readable on phones.
+- **Send the form somewhere real:** a Server Action posting to the CRM, with server-side validation and rate limiting.
+- **Fetch from a real CMS** with `revalidate`, with images and alt text coming from the CMS instead of `lib/media.ts`.
+- **Automate the QA pass:** Playwright screenshots at 360, 960 and 1440 compared against the Figma exports, and axe accessibility checks in CI.
+- **Inline error messages** in the brand's style, once the design system has error colors.
+- **A designed tablet layout** for 600–959px.
+- **Self-host Sequel Sans** if the license allows, so line breaks match Figma.
