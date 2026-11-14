@@ -1,0 +1,53 @@
+.button {
+  composes: button from '../../../styles/typography.module.css';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding-block: var(--space-200);
+  color: var(--color-neutral-050);
+  text-align: center;
+  text-decoration: none;
+}
+
+.primary {
+  position: relative;
+  isolation: isolate;
+  padding-inline: var(--space-600);
+  border-radius: var(--radius-rounded);
+  background: var(--gradient-brand);
+}
+
+/* Gradients can't transition, so hover darkens through an overlay's opacity. */
+.primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--color-neutral-900);
+  opacity: 0;
+}
+
+.primary:hover::after {
+  opacity: 0.15;
+}
+
+.primary:active::after {
+  opacity: 0.3;
+}
+
+/* Figma "light ghost": text only, for dark surfaces. */
+.ghost {
+  text-underline-offset: 4px;
+}
+
+.ghost:hover {
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .primary::after {
+    transition: opacity 150ms;
+  }
+}

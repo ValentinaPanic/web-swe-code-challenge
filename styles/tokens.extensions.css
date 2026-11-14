@@ -40,4 +40,13 @@
 
   /* Not in DS: from Figma cg-font-letter_spacing-caps (button labels). */
   --letter-spacing-caps: 1.5px;
+
+  /*
+    Not in DS: from Figma Background/Inverse (nav bar, sticky banner, spotlight
+    panels). Must match the nav image's edge exactly, so no nearest token.
+  */
+  --color-background-inverse: #192129;
+
+  /* Not in DS: from Figma Gradient/Blue 5 (primary buttons). The purple end has no token. */
+  --gradient-brand: linear-gradient(90deg, var(--color-primary-500), #9900e0);
 }

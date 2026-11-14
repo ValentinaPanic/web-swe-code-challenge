@@ -42,7 +42,7 @@ This is a take-home for a Senior Web Engineer role at DAT. The task is a "Soluti
 | # | Conflict | Default | Ask? |
 |---|---|---|---|
 | C1 | **Font**: Figma uses Sequel Sans (licensed, with odd weights 305, 325, 375 and 385). Tokens use the system stack. | Use `--font-family-base`. Map weights: Book → regular 400, Bold Body → bold 700, Bold Head → bold 700, Black Head → black 900. Accept that line wraps will differ slightly from Figma, and note it in SPEC. | No |
-| C2 | **`#192129`** (Text/Primary, Background/Inverse for nav, banner and spotlight media) is **not in tokens.css**. It sits between neutral-800 `#2d3943` and neutral-1000 `#0a0d10`. | Text: use `--color-neutral-1000` (indistinguishable at text sizes). Dark surfaces: also neutral-1000 for now, as a documented deviation. **Top question for the hiring manager.** | Yes |
+| C2 | **`#192129`** (Text/Primary, Background/Inverse for nav, banner and spotlight media) is **not in tokens.css**. It sits between neutral-800 `#2d3943` and neutral-1000 `#0a0d10`. | Text: use `--color-neutral-1000` (indistinguishable at text sizes). Dark surfaces: `--color-background-inverse: #192129` in `tokens.extensions.css` (decided in step 6: the nav band must match the nav image exactly, so one token serves nav, banner and spotlight panels). **Top question for the hiring manager.** | Yes |
 | C3 | **Brand gradient** "Gradient/Blue 5" `#0046e0 → #9900e0`. No purple token exists. | Add `--gradient-brand` in `tokens.extensions.css`, using `--color-primary-500` plus one documented gap hex. | Yes (bundle with C2) |
 | C4 | **No spacing, line-height or letter-spacing tokens**. Figma uses an 8-px grid (8–120), line heights 72/56/36/28/24/22/20/16, and caps tracking of 1.5px. | Define `--space-*`, `--line-height-*` and `--letter-spacing-caps` in `tokens.extensions.css`, named like the existing scale. Every value comes from Figma. | No |
 | C5 | **Radius naming**: Figma's `border_radius-large` is 72 (pill), but `tokens.css` `--radius-large` is 8. | Pills use `--radius-rounded` and cards use `--radius-large`. Note the naming trap in CLAUDE.md. | No |
@@ -81,7 +81,7 @@ This is a take-home for a Senior Web Engineer role at DAT. The task is a "Soluti
   - Header height is the same at every width inside a breakpoint (76 / 64 / 64), so `scroll-margin-top` is a simple per-breakpoint value.
   - Between breakpoints the image keeps its size, with dark bands at the sides. Stretching instead would make the nav up to 200px tall at tablet widths.
   - Exception: the 960 footer image shrinks to fit below 960 (see C15).
-- Background colors: the nav band is `#192129` (Figma `fill-navigation-default`, the same gap as C2), and the footer band is `#0a0d10` (sampled in step 4, exactly `--color-neutral-1000`). Both are defined as tokens in `tokens.extensions.css` in step 6 and recorded in SPEC "Assumptions & trade-offs".
+- Background colors: the nav band is `--color-background-inverse` (`#192129`, Figma Background/Inverse, the same gap as C2, defined in `tokens.extensions.css` in step 6). The footer band is `--color-neutral-1000` directly (sampled in step 4 as exactly `#0a0d10`, so it needs no new token).
 - The header stays sticky as the prototype shows: `position: sticky; top: 0` around the image.
 
 **Styling.**
@@ -146,7 +146,7 @@ data/content.json
 - `CheckboxGroup`: `{ legend; name; options }`
 - `CtaBanner`: `{ cta }`
 - `SiteHeader` and `SiteFooter`: no props for now (images come from `lib/media.ts`). They take `{ nav }` and `{ footer }` if step 13 happens.
-- `ArtDirectedImage`: `{ sources: { media: string; src: StaticImageData }[]; fallback: StaticImageData; alt: string; className? }`
+- `ArtDirectedImage`: `{ alt; base; at960?; at1440?; loading?; className? }` (simplified in step 6 from a generic `sources[]`: the breakpoints are fixed project-wide)
 
 ---
 
@@ -222,6 +222,8 @@ data/content.json
    - The right image appears at each breakpoint (look at the Network panel: only one image downloads per breakpoint).
    - The header stays pinned while scrolling.
    - From 960px up, the banner pins to the bottom and then settles above the footer. Below 960px it sits in the flow at the end of the page.
+
+   **Done:** `ArtDirectedImage` (`getImageProps` → `<picture>`, @2x exports shown at half width with 1x/2x srcsets), a sticky `SiteHeader`, a `CtaBanner` (an `aside`, sticky from 960px up, built from the separate banner frames 32:2352 / 1:1334 / 1:1341), a `SiteFooter`, a link-only `Button` (primary and ghost; the other variants and `<button>` wait for the steps that need them), `lib/media.ts` for nav and footer, plus `--color-background-inverse`, `--gradient-brand` and a `bannerHeading` role class.
 7. **AuthorityForm (highest interaction risk):** fields, floating labels (including selects), validation, no-reload submit, success state, two- to one-column layout.
 8. **Features (risk: mobile scroller):** grid ↔ scroll-snap, keyboard scrolling.
 9. **Spotlight:** media composition (dark panel, 20% photo, inset screenshot), `mediaPosition`, mobile stacking.

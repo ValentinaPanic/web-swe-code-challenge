@@ -71,6 +71,25 @@
   font-weight: var(--font-weight-bold);
 }
 
+/*
+  Role classes: headings that switch Figma style per breakpoint (composes can't
+  sit inside a media query).
+*/
+
+/* CTA banner: Headline Small/Strong, Headline Medium/Strong at 1440. */
+.bannerHeading {
+  font-size: var(--font-size-400);
+  line-height: var(--line-height-400);
+  font-weight: var(--font-weight-bold);
+}
+
+@media (min-width: 1440px) {
+  .bannerHeading {
+    font-size: var(--font-size-500);
+    line-height: var(--line-height-500);
+  }
+}
+
 /* Figma has no named style for buttons; this is the shared 10/16 caps label. */
 .button {
   font-size: var(--font-size-050);
