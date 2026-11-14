@@ -9,8 +9,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Solutions for Freight Brokers | DAT",
     description: hero.subheading,
-    // No favicon in the design; an empty icon stops the browser's /favicon.ico 404.
-    icons: { icon: "data:," },
   };
 }
 

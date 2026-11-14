@@ -113,7 +113,7 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
   - The hero CTA scrolls the form heading to just below the sticky nav. An empty submit shows native messages with no reload. A valid submit shows the success message, clears the form and leaves the URL unchanged.
   - Lighthouse (mobile): Accessibility 100, Best Practices 100, SEO 100, Performance 97.
 - **W3C validation.** The built HTML passes the Nu HTML Checker with no HTML errors. The checker reports seven CSS errors, all for the scroll-driven animation properties behind the carousel dots (`timeline-scope`, `view-timeline-name`, `animation-timeline`). Those properties are in the CSS Scroll-driven Animations spec and ship in Chrome and Safari; the checker's CSS grammar doesn't include them yet. The info notes are about React's `<img />` syntax, which has no effect.
-- **No favicon.** The design has none, and inventing a DAT mark felt wrong for a page shown to stakeholders. An empty icon declared in the metadata stops the browser's `/favicon.ico` request, which would otherwise be the only console error. A real icon is one file away (`app/icon.png`).
+- **Favicon from dat.com.** The design doesn't include one, and without it the browser's `/favicon.ico` request was the only console error. DAT's own 150×150 favicon is [`app/icon.png`](app/icon.png), which Next's file convention turns into the `<link rel="icon">`.
 
 ## If I had more time
 
