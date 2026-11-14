@@ -58,6 +58,11 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
 <!-- The design doesn't spell out every interaction. What did you decide,
      and why? -->
 
+- **Focus states.** Every interactive element shows a 4px focus ring (`--border-weight-focus`) only for keyboard users (`:focus-visible`), so mouse clicks don't leave rings behind. On dark surfaces like the "Get started today" banner, the ring switches to the lighter `--color-primary-200`. That stays visible against the dark background and is a little closer to the focus style on the live DAT site. All buttons share the same pill-shaped ring, so focus looks the same whichever button you land on.
+- **Hover states.** Most calls to action darken slightly on hover. I prefer this because it gives clear feedback without changing the button's color or shape. The gradient can't be animated directly, so a dark layer fades in over it. The ghost button ("Learn more") has no background to darken, so it gets an underline instead, which is easy to see on the dark banner.
+- **Sticky header and banner in CSS only.** The prototype pins the nav to the top and the "Get started today" banner to the bottom. Both use `position: sticky`, with no JavaScript, scroll listeners or client component: they work before any script loads, and there's nothing that can break or fall out of sync. From 960px up, the banner settles above the footer on its own once you reach the end of the page. Below 960px it's a regular section at the end of the page for now (see Assumptions & trade-offs).
+- **Mobile button order follows Figma.** On phones the banner stacks "Request a demo" above "Learn more", as in the 360 frame. "Request a demo" is the punchier action, so it belongs on top. The HTML keeps `content.json`'s order (Learn more, then Request a demo), which matches desktop, so on mobile the keyboard and screen-reader order runs bottom to top. With two adjacent buttons, I accepted that small mismatch.
+
 ## Assumptions & trade-offs
 
 <!-- Anything you assumed, skipped, or simplified given the time box, and
