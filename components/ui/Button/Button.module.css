@@ -5,6 +5,8 @@
   justify-content: center;
   min-height: 36px;
   padding-block: var(--space-200);
+  /* On every variant, so all focus rings share the pill shape. */
+  border-radius: var(--radius-rounded);
   color: var(--color-neutral-050);
   text-align: center;
   text-decoration: none;
@@ -14,7 +16,6 @@
   position: relative;
   isolation: isolate;
   padding-inline: var(--space-600);
-  border-radius: var(--radius-rounded);
   background: var(--gradient-brand);
 }
 
@@ -39,6 +40,8 @@
 
 /* Figma "light ghost": text only, for dark surfaces. */
 .ghost {
+  /* Figma hugs the text; the padding keeps the pill focus ring off the letters. */
+  padding-inline: var(--space-300);
   text-underline-offset: 4px;
 }
 

@@ -51,10 +51,11 @@
     flex: 1;
   }
 
+  /* 12 + the ghost button's 12px padding = Figma's 24px from its text to the next button. */
   .actions {
     flex-direction: row;
     align-items: center;
-    gap: var(--space-600);
+    gap: var(--space-300);
   }
 
   .action {
