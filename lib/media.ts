@@ -4,6 +4,9 @@ import footer960 from '@/assets/images/footer-960@2x.png';
 import nav1440 from '@/assets/images/nav-1440@2x.png';
 import nav360 from '@/assets/images/nav-360@2x.png';
 import nav960 from '@/assets/images/nav-960@2x.png';
+import contractBid from '@/assets/images/screenshot-contract-bid.png';
+import loadBoard from '@/assets/images/screenshot-load-board.png';
+import rateView from '@/assets/images/screenshot-rateview.png';
 
 // Nav and footer are placeholder renders the brief allows; alt text doesn't promise working links.
 export const navImage = {
@@ -19,3 +22,10 @@ export const footerImage = {
   base: footer960,
   at1440: footer1440,
 };
+
+// In the same order as content.features.items.
+export const featureImages = [
+  { src: loadBoard, alt: 'DAT One load board search results' },
+  { src: rateView, alt: 'RateView lane rate analytics' },
+  { src: contractBid, alt: 'DAT contract bid with carrier awards' },
+];

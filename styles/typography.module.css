@@ -105,6 +105,49 @@
   }
 }
 
+/* Features heading: Headline Small/Black, Headline Large/Strong from 960. */
+.featuresHeading {
+  font-size: var(--font-size-400);
+  line-height: var(--line-height-400);
+  font-weight: var(--font-weight-black);
+}
+
+@media (min-width: 960px) {
+  .featuresHeading {
+    font-size: var(--font-size-600);
+    line-height: var(--line-height-600);
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+/* Feature card title: Title Large/Black, Headline Small/Black from 960 (PLAN C7). */
+.featureTitle {
+  font-size: var(--font-size-300);
+  line-height: var(--line-height-300);
+  font-weight: var(--font-weight-black);
+}
+
+@media (min-width: 960px) {
+  .featureTitle {
+    font-size: var(--font-size-400);
+    line-height: var(--line-height-400);
+  }
+}
+
+/* Feature card text: Body Small/Regular, Body Large/Regular from 960 (PLAN C7). */
+.featureText {
+  font-size: var(--font-size-200);
+  line-height: var(--line-height-200);
+  font-weight: var(--font-weight-regular);
+}
+
+@media (min-width: 960px) {
+  .featureText {
+    font-size: var(--font-size-300);
+    line-height: var(--line-height-300);
+  }
+}
+
 /* Form submit: a detached Figma style, 12/22 caps with tighter tracking (PLAN C9). */
 .submitLabel {
   font-size: var(--font-size-100);

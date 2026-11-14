@@ -1,0 +1,110 @@
+/* Below 960 the list scrolls edge to edge, so inline padding sits on the children, not the section. */
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-800);
+  padding-block: var(--space-1400);
+}
+
+.heading {
+  composes: featuresHeading from '../../styles/typography.module.css';
+  align-self: stretch;
+  padding-inline: var(--space-400);
+}
+
+/* Mobile: horizontal scroll-snap carousel. Cards are 85% wide so the next one peeks in (PLAN §5). */
+.list {
+  display: flex;
+  align-self: stretch;
+  gap: var(--space-1000);
+  padding: 0 var(--space-400);
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--space-400);
+}
+
+/* The list spans the viewport, so an outside ring would be clipped at the screen edges. */
+.list:focus-visible {
+  outline-offset: calc(-1 * var(--border-weight-focus));
+}
+
+.item {
+  flex: 0 0 85%;
+  scroll-snap-align: start;
+}
+
+/* Figma: 8px to the text block plus its 16px top padding. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-600);
+}
+
+/* Screenshot inset on a light panel. Figma's panels are about 8:5 at every breakpoint. */
+.media {
+  display: flex;
+  aspect-ratio: 8 / 5;
+  padding: var(--space-500);
+  border-radius: var(--radius-large);
+  background: var(--color-neutral-050);
+}
+
+/* Top-anchored crop, as Figma crops the taller contract bid screenshot. */
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-200);
+}
+
+.title {
+  composes: featureTitle from '../../styles/typography.module.css';
+}
+
+.description {
+  composes: featureText from '../../styles/typography.module.css';
+}
+
+@media (min-width: 960px) {
+  /* Figma's heading-to-list gap is 37px; 40 is the nearest spacing step. */
+  .section {
+    gap: var(--space-1000);
+    padding: var(--space-2200) var(--space-1100);
+  }
+
+  .heading {
+    align-self: center;
+    padding-inline: 0;
+    text-align: center;
+  }
+
+  /* 1216px is the content width in the 1440 frame. */
+  .list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-self: center;
+    width: 100%;
+    max-width: 1216px;
+    gap: var(--space-600);
+    padding: 0;
+    overflow-x: visible;
+  }
+
+  .text {
+    gap: var(--space-400);
+  }
+}
+
+@media (min-width: 1440px) {
+  .section {
+    padding: var(--space-3000) var(--space-2800);
+  }
+}
