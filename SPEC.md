@@ -6,7 +6,7 @@
      (not a full transcript) — enough for us to see how you direct AI and
      evaluate what it gives you. -->
 
-**Tools:** Claude Code (planning, scaffolding, implementation) with the Figma MCP server (reading frames, variables and assets). The agent works from [`CLAUDE.md`](CLAUDE.md) (repo rules) and [`PLAN.md`](PLAN.md) (the approved plan). A small hook ([`.claude/hooks/ai-log.mjs`](.claude/hooks/ai-log.mjs)) keeps a raw log of every prompt and reply. This section lists only representative prompts.
+**Tools:** Claude Code (planning, scaffolding, implementation) with the Figma MCP server (reading frames, variables and assets). The agent works from [`CLAUDE.md`](CLAUDE.md) (repo rules) and [`PLAN.md`](PLAN.md) (the approved plan). A small hook ([`.claude/hooks/ai-log.mjs`](.claude/hooks/ai-log.mjs)) keeps a raw log of every prompt and reply. That log stays local and isn't committed. This section lists only representative prompts.
 
 ### 1. Planning before any code
 > "TASK: plan only. Write no code and install nothing. Read CHALLENGE.md first and treat its evaluation criteria as the bar for every decision. Then examine the Figma file … Look at every frame and breakpoint, including the prototype frame. … Where you're unsure, say so instead of guessing."

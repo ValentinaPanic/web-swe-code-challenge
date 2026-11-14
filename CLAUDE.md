@@ -37,7 +37,7 @@ than your training data. Commit AGENTS.md if `next dev` rewrites it.)
   asking first and giving a reason. No zod, no Tailwind, no UI kits.
 - Server Components by default. 'use client' only in AuthorityForm. Do not add
   useEffect. Do not add client-side data fetching.
-- Nav and footer are static images (<picture> via ui/ArtDirectedImage) until I
+- Nav and footer are static images (`<picture>` via ui/ArtDirectedImage) until I
   say otherwise. Do not build them in HTML, and do not spend effort on them.
 - Content comes only from lib/content.ts getContent(). Media only from lib/media.ts.
 
@@ -60,7 +60,7 @@ than your training data. Commit AGENTS.md if `next dev` rewrites it.)
   prefers-reduced-motion: no-preference.
 
 ## HTML rules
-- One h1. Sections use aria-labelledby. Real <label>s; never placeholder-as-label.
+- One h1. Sections use aria-labelledby. Real `<label>`s; never placeholder-as-label.
 - Decorative images: alt="". Product screenshots: specific alt.
 - Class names describe what a thing is (.callout, .benefitList), not how it looks.
 
