@@ -1,0 +1,74 @@
+.field {
+  position: relative;
+}
+
+.control {
+  composes: bodyLarge from '../../../styles/typography.module.css';
+  display: block;
+  width: 100%;
+  height: 56px;
+  margin: 0;
+  padding: var(--space-400);
+  border: 1px solid var(--color-neutral-400);
+  border-radius: var(--radius-default);
+  color: var(--color-neutral-1000);
+  background-color: var(--color-neutral-000);
+  font-family: inherit;
+}
+
+.control:hover {
+  border-color: var(--color-neutral-600);
+}
+
+.control:focus {
+  border-color: var(--color-primary-500);
+}
+
+select.control {
+  appearance: none;
+  padding-right: var(--space-1200);
+  background: var(--color-neutral-000) url('../../../assets/images/icon-arrow-drop-down.svg') no-repeat right var(--space-400) center;
+  cursor: pointer;
+}
+
+/* Sits where Figma draws the label text; clicks fall through to the control. */
+.label {
+  composes: bodyLarge from '../../../styles/typography.module.css';
+  position: absolute;
+  top: 17px;
+  left: var(--space-400);
+  max-width: calc(100% - var(--space-1600));
+  overflow: hidden;
+  color: var(--color-neutral-500);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  transform-origin: left top;
+}
+
+/*
+  Focused or filled: the label shrinks to 14px (scale keeps the type tokens in
+  the typography module) and moves onto the top border. Inputs use a blank
+  placeholder to tell empty from filled; selects check the empty option.
+*/
+.control:focus + .label,
+input.control:not(:placeholder-shown) + .label,
+select.control:not(:has(option[value='']:checked)) + .label {
+  padding-inline: var(--space-200);
+  background: var(--color-neutral-000);
+  transform: translate(calc(-1 * var(--space-200)), -27px) scale(0.875);
+}
+
+.control:focus + .label {
+  color: var(--color-primary-500);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .label {
+    transition: transform 150ms, color 150ms;
+  }
+
+  .control {
+    transition: border-color 150ms;
+  }
+}

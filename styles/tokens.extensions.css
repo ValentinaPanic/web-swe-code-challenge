@@ -1,0 +1,71 @@
+/*
+  Values the design system (tokens.css) doesn't have yet, all taken from the
+  Figma file. Keep this file to real gaps: if tokens.css covers a value, use it.
+*/
+
+:root {
+  /*
+    Not in DS: spacing, from Figma's cg-spacing scale. Its one published
+    variable is cg-spacing-200 = 8, so a step of 100 is 4px.
+  */
+  --space-200: 8px;
+  --space-300: 12px;
+  --space-400: 16px;
+  --space-500: 20px;
+  --space-600: 24px;
+  --space-800: 32px;
+  --space-1000: 40px;
+  --space-1100: 44px;
+  --space-1200: 48px;
+  --space-1400: 56px;
+  --space-1600: 64px;
+  --space-1800: 72px;
+  --space-2200: 88px;
+  --space-2400: 96px;
+  --space-2800: 112px;
+  --space-3000: 120px;
+
+  /*
+    Not in DS: line heights, from Figma's cg-font-line_height variables.
+    Numbered to pair with the --font-size-* step they're used with.
+  */
+  --line-height-050: 16px; /* button, 10px */
+  --line-height-200: 20px; /* body small, 14px */
+  --line-height-300: 22px; /* body large, title large, 16px */
+  --line-height-400: 24px; /* headline small, 20px */
+  --line-height-500: 28px; /* headline medium, 24px */
+  --line-height-600: 36px; /* headline large, 34px */
+  --line-height-700: 56px; /* display small, 48px */
+  --line-height-900: 72px; /* display medium, 60px */
+
+  /* Not in DS: from Figma cg-font-letter_spacing-caps (button labels). */
+  --letter-spacing-caps: 1.5px;
+  /* Not in DS: from the Figma form submit button's detached text style (0.6px). */
+  --letter-spacing-submit: 0.6px;
+
+  /*
+    Not in DS: from Figma Background/Inverse (nav bar, sticky banner, spotlight
+    panels). Must match the nav image's edge exactly, so no nearest token.
+  */
+  --color-background-inverse: #192129;
+
+  /* Not in DS: from Figma Gradient/Blue 5 (primary buttons). The purple end has no token. */
+  --gradient-brand: linear-gradient(90deg, var(--color-primary-500), #9900e0);
+
+  /*
+    Not in DS: from the Figma hero "gradient" frame, two primary-100 shapes
+    blurred by 175px off the top-left and bottom-right corners. Two radial
+    gradients draw the same glow without shipping the SVG. Sizes and strengths
+    were fitted to Figma's rendered 1440 and 960 frames; the blur never reaches
+    full primary-100, and the middle of the section stays white.
+  */
+  --gradient-hero:
+    radial-gradient(480px 520px at 0 0, color-mix(in srgb, var(--color-primary-100) 80%, transparent), transparent),
+    radial-gradient(500px 520px at 100% 100%, color-mix(in srgb, var(--color-primary-100) 75%, transparent), transparent);
+
+  /*
+    Not in DS or Figma (design decision): upward shadow that separates the
+    sticky banner from the content scrolling under it, including the dark footer.
+  */
+  --shadow-sticky-bottom: 0 -4px 16px color-mix(in srgb, var(--color-neutral-900) 40%, transparent);
+}

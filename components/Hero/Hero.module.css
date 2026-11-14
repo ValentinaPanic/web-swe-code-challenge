@@ -1,0 +1,126 @@
+.section {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-1800) var(--space-400);
+  background: var(--gradient-hero);
+}
+
+/* Mobile: text, then callout, then image. 1216px is the 1440 frame's content width. */
+.container {
+  display: flex;
+  flex: 0 1 1216px;
+  flex-direction: column;
+  gap: var(--space-1200);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1200);
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-600);
+}
+
+.heading {
+  composes: heroHeading from '../../styles/typography.module.css';
+}
+
+.subheading {
+  composes: bodyLarge from '../../styles/typography.module.css';
+}
+
+/* Mobile: icon and message in a row, full-width button below. */
+.callout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-400);
+  padding: var(--space-600) var(--space-400);
+  border-radius: var(--radius-default);
+  background: var(--color-primary-050);
+}
+
+.calloutMessage {
+  display: flex;
+  gap: var(--space-400);
+}
+
+.calloutIcon {
+  flex: none;
+  width: var(--space-1000);
+  height: var(--space-1000);
+  border-radius: var(--radius-rounded);
+  background: url('../../assets/images/icon-account-balance.svg') no-repeat center var(--color-primary-100);
+}
+
+.calloutText {
+  composes: bodyLarge from '../../styles/typography.module.css';
+  color: var(--color-primary-700);
+}
+
+.calloutHeading {
+  composes: bodyLargeStrong from '../../styles/typography.module.css';
+  display: block;
+}
+
+/* Keeps the label on one line when the 960 callout is tight. */
+.calloutCta {
+  flex: none;
+}
+
+/*
+  Side by side. Flex ratios are the frames' column widths (text 435 + image 405
+  at 960, 624 + 544 at 1440), so the split holds at widths between the frames.
+*/
+@media (min-width: 960px) {
+  .section {
+    padding: var(--space-1400) var(--space-1100);
+  }
+
+  .container {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-800);
+  }
+
+  .text {
+    flex: 435;
+    gap: var(--space-600);
+  }
+
+  .callout {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .calloutMessage {
+    flex: 1;
+    align-items: center;
+  }
+
+  .image {
+    flex: 405;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 1440px) {
+  .section {
+    padding: var(--space-2200) var(--space-2800);
+  }
+
+  .container {
+    gap: var(--space-1200);
+  }
+
+  .text {
+    flex: 624;
+  }
+
+  .image {
+    flex: 544;
+  }
+}

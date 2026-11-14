@@ -1,0 +1,84 @@
+.section {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-600);
+  /* Keeps the heading clear of the sticky nav (76px tall below 960) when the hero CTA jumps here. */
+  scroll-margin-top: 76px;
+}
+
+/* Figma's 576px width, shrinking on narrow screens; the section's flex centers it. */
+.form {
+  display: flex;
+  flex: 0 1 576px;
+  flex-direction: column;
+  gap: var(--space-800);
+}
+
+.heading {
+  composes: formHeading from '../../styles/typography.module.css';
+  text-align: center;
+}
+
+/* Figma's row gap is 29px; snapped to 24 like the column gap (PLAN C10). */
+.fields {
+  display: grid;
+  gap: var(--space-600);
+}
+
+.consent {
+  composes: bodySmall from '../../styles/typography.module.css';
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Gap only once the message has text, so the empty live region adds no space. */
+.actions:has(.status:not(:empty)) {
+  gap: var(--space-400);
+}
+
+/* Figma's submit is a one-off solid style, not the gradient primary button (PLAN C9). */
+.submit {
+  composes: submitLabel from '../../styles/typography.module.css';
+  min-height: 36px;
+  padding: var(--space-200) var(--space-600);
+  border: 0;
+  border-radius: var(--radius-rounded);
+  color: var(--color-neutral-000);
+  background: var(--color-primary-500);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.submit:hover {
+  background: var(--color-primary-600);
+}
+
+.submit:active {
+  background: var(--color-primary-700);
+}
+
+.status {
+  composes: bodyLargeStrong from '../../styles/typography.module.css';
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .submit {
+    transition: background-color 150ms;
+  }
+}
+
+@media (min-width: 960px) {
+  /* Figma: 76px at 960, 72 at 1440. One value, on the spacing scale. */
+  .section {
+    padding-block: var(--space-1800);
+    scroll-margin-top: 64px;
+  }
+
+  .fields {
+    grid-template-columns: 1fr 1fr;
+  }
+}

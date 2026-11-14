@@ -1,0 +1,25 @@
+/*
+  Figma's 1px rule between sections, inset from the page edge (16 / 48 / 62).
+  The padding is the inset and the line is the background of the content box,
+  so the hr stays a plain full-width block with no margins.
+*/
+.divider {
+  height: 1px;
+  margin: 0;
+  padding-inline: var(--space-400);
+  border: 0;
+  background: var(--color-neutral-200) content-box;
+}
+
+@media (min-width: 960px) {
+  .divider {
+    padding-inline: var(--space-1200);
+  }
+}
+
+/* Figma's 62px snapped to 64. Wider than 1440 the line keeps its 1440 length (1312px), centered. */
+@media (min-width: 1440px) {
+  .divider {
+    padding-inline: max(var(--space-1600), 50% - 656px);
+  }
+}

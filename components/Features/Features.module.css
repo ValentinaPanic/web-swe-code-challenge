@@ -1,0 +1,158 @@
+/* Below 960 the list scrolls edge to edge, so inline padding sits on the children, not the section. */
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-800);
+  padding-block: var(--space-1400);
+}
+
+.heading {
+  composes: featuresHeading from '../../styles/typography.module.css';
+  align-self: stretch;
+  padding-inline: var(--space-400);
+}
+
+/* Mobile: horizontal scroll-snap carousel, one full-width card centered in view at a time. */
+.list {
+  display: flex;
+  align-self: stretch;
+  gap: var(--space-1000);
+  padding: 0 var(--space-400);
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--space-400);
+}
+
+/* The list spans the viewport, so an outside ring would be clipped at the screen edges. */
+.list:focus-visible {
+  outline-offset: calc(-1 * var(--border-weight-focus));
+}
+
+/* stop: always, so one swipe moves exactly one card. */
+.item {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  view-timeline-axis: inline;
+}
+
+/*
+  Carousel dots. Each dot's animation runs on its card's view timeline, so it
+  turns blue while that card is centered. Hidden where scroll-driven animations
+  aren't supported (all dots would look inactive there).
+*/
+.dots {
+  display: none;
+  justify-content: center;
+  gap: var(--space-200);
+}
+
+@supports (animation-timeline: view()) {
+  .dots {
+    display: flex;
+  }
+}
+
+.dot {
+  width: var(--space-200);
+  height: var(--space-200);
+  border-radius: var(--radius-rounded);
+  background: var(--color-neutral-200);
+  animation: activeDot linear both;
+  animation-range: cover;
+}
+
+/* 50% of the cover range is the card centered in view. */
+@keyframes activeDot {
+  35%,
+  65% {
+    background: var(--color-neutral-200);
+  }
+
+  45%,
+  55% {
+    background: var(--color-primary-500);
+  }
+}
+
+/* Figma: 8px to the text block plus its 16px top padding. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-600);
+}
+
+/* Screenshot inset on a light panel; the panel's height follows the image. */
+.media {
+  padding: var(--space-500);
+  border-radius: var(--radius-large);
+  background: var(--color-neutral-050);
+}
+
+/*
+  One fixed shape for every screenshot so the cards match: 16:9 plus the inset
+  gives Figma's panel heights (238 / 182 / 205). The taller contract bid shot is
+  cropped from the top, as in Figma.
+*/
+.image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: top;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-200);
+}
+
+.title {
+  composes: featureTitle from '../../styles/typography.module.css';
+}
+
+.description {
+  composes: bodyResponsive from '../../styles/typography.module.css';
+}
+
+@media (min-width: 960px) {
+  /* Figma's heading-to-list gap is 37px; 40 is the nearest spacing step. */
+  .section {
+    gap: var(--space-1000);
+    padding: var(--space-2200) var(--space-1100);
+  }
+
+  .heading {
+    align-self: center;
+    padding-inline: 0;
+    text-align: center;
+  }
+
+  /* 1216px is the content width in the 1440 frame. */
+  .list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-self: center;
+    width: 100%;
+    max-width: 1216px;
+    gap: var(--space-600);
+    padding: 0;
+    overflow-x: visible;
+  }
+
+  .text {
+    gap: var(--space-400);
+  }
+
+  .dots {
+    display: none;
+  }
+}
+
+@media (min-width: 1440px) {
+  .section {
+    padding: var(--space-3000) var(--space-2800);
+  }
+}

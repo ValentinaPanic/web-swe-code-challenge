@@ -1,0 +1,55 @@
+.fieldset {
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* Browsers keep a fieldset's legend out of its flex/grid flow, so gap can't space it; padding does. */
+.legend {
+  composes: bodyLargeStrong from '../../../styles/typography.module.css';
+  padding: 0 0 var(--space-400);
+  color: var(--color-neutral-900);
+}
+
+/* In a row at every width (Figma stacks them on mobile); wraps on very narrow screens. */
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-400) var(--space-800);
+}
+
+.option {
+  composes: bodySmall from '../../../styles/typography.module.css';
+  display: flex;
+  align-items: center;
+  gap: var(--space-200);
+  min-inline-size: 82px;
+  cursor: pointer;
+}
+
+.checkbox {
+  appearance: none;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border: 2px solid var(--color-neutral-500);
+  border-radius: var(--radius-default);
+  cursor: pointer;
+}
+
+.checkbox:hover {
+  border-color: var(--color-neutral-600);
+}
+
+.checkbox:checked {
+  border: 0;
+  background: var(--color-primary-500) url('../../../assets/images/icon-checkbox-checked.svg') no-repeat center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .checkbox {
+    transition: border-color 150ms, background-color 150ms;
+  }
+}

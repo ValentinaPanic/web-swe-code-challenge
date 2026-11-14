@@ -1,0 +1,132 @@
+.section {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-1200) var(--space-400);
+}
+
+/* Mobile: media on top, text below, for both spotlights. 1216px is the 1440 frame's content width. */
+.container {
+  display: flex;
+  flex: 0 1 1216px;
+  flex-direction: column;
+  gap: var(--space-600);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-400);
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-200);
+}
+
+.title {
+  composes: spotlightTitle from '../../styles/typography.module.css';
+}
+
+.description {
+  composes: bodyResponsive from '../../styles/typography.module.css';
+}
+
+.benefits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-400);
+  padding: 0;
+  list-style: none;
+}
+
+.benefit {
+  composes: bodyResponsiveStrong from '../../styles/typography.module.css';
+  display: flex;
+  align-items: center;
+  gap: var(--space-200);
+}
+
+/* Decorative check, drawn in CSS like the form's checkbox and dropdown icons. */
+.benefit::before {
+  content: '';
+  flex: none;
+  width: var(--space-600);
+  height: var(--space-600);
+  background: url('../../assets/images/icon-check-circle.svg') no-repeat center;
+}
+
+/* Dark panel with the photo at 20% and the screenshot centered on top, in Figma's proportions. */
+.media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  order: -1;
+  aspect-ratio: 328 / 236;
+  overflow: hidden;
+  border-radius: var(--radius-large);
+  background: var(--color-background-inverse);
+}
+
+.photo {
+  object-fit: cover;
+  opacity: 0.2;
+}
+
+/* Positioned so it paints above the absolutely positioned photo. */
+.screenshot {
+  position: relative;
+  width: 86%;
+}
+
+/*
+  Side by side. Flex ratios are the frames' column widths (text 351 + media 449
+  at 960, 439 + 705 at 1440), so the split holds at widths between the frames.
+*/
+@media (min-width: 960px) {
+  .section {
+    padding: var(--space-2200) var(--space-1100);
+  }
+
+  .container {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-1800);
+  }
+
+  .text {
+    flex: 351;
+  }
+
+  .media {
+    flex: 449;
+    aspect-ratio: 449 / 320;
+  }
+
+  .section[data-media='right'] .media {
+    order: 0;
+  }
+
+  .screenshot {
+    width: 89%;
+  }
+}
+
+@media (min-width: 1440px) {
+  .section {
+    padding: var(--space-3000) var(--space-2800);
+  }
+
+  .text {
+    flex: 439;
+  }
+
+  .media {
+    flex: 705;
+    aspect-ratio: 705 / 461;
+  }
+
+  .screenshot {
+    width: 86%;
+  }
+}

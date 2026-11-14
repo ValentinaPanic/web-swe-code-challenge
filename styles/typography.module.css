@@ -1,0 +1,210 @@
+/*
+  One class per Figma text style used on the page. Components pull these in
+  with `composes:`.
+  Sequel Sans weights map to the DS scale (PLAN C1): Book → regular,
+  Bold Body / Bold Head → bold, Black Head → black.
+*/
+
+.displayMedium {
+  font-size: var(--font-size-900);
+  line-height: var(--line-height-900);
+  font-weight: var(--font-weight-black);
+}
+
+.displaySmall {
+  font-size: var(--font-size-700);
+  line-height: var(--line-height-700);
+  font-weight: var(--font-weight-black);
+}
+
+.headlineLarge {
+  font-size: var(--font-size-600);
+  line-height: var(--line-height-600);
+  font-weight: var(--font-weight-bold);
+}
+
+.headlineLargeBlack {
+  font-size: var(--font-size-600);
+  line-height: var(--line-height-600);
+  font-weight: var(--font-weight-black);
+}
+
+.headlineMediumBlack {
+  font-size: var(--font-size-500);
+  line-height: var(--line-height-500);
+  font-weight: var(--font-weight-black);
+}
+
+.headlineSmallBlack {
+  font-size: var(--font-size-400);
+  line-height: var(--line-height-400);
+  font-weight: var(--font-weight-black);
+}
+
+.titleLargeBlack {
+  font-size: var(--font-size-300);
+  line-height: var(--line-height-300);
+  font-weight: var(--font-weight-black);
+}
+
+.bodyLarge {
+  font-size: var(--font-size-300);
+  line-height: var(--line-height-300);
+  font-weight: var(--font-weight-regular);
+}
+
+.bodyLargeStrong {
+  font-size: var(--font-size-300);
+  line-height: var(--line-height-300);
+  font-weight: var(--font-weight-bold);
+}
+
+.bodySmall {
+  font-size: var(--font-size-200);
+  line-height: var(--line-height-200);
+  font-weight: var(--font-weight-regular);
+}
+
+.bodySmallStrong {
+  font-size: var(--font-size-200);
+  line-height: var(--line-height-200);
+  font-weight: var(--font-weight-bold);
+}
+
+/*
+  Role classes: headings that switch Figma style per breakpoint (composes can't
+  sit inside a media query).
+*/
+
+/* Hero h1: Headline Large/Black, Display Small/Strong from 960, Display Medium/Strong at 1440. */
+.heroHeading {
+  font-size: var(--font-size-600);
+  line-height: var(--line-height-600);
+  font-weight: var(--font-weight-black);
+}
+
+@media (min-width: 960px) {
+  .heroHeading {
+    font-size: var(--font-size-700);
+    line-height: var(--line-height-700);
+  }
+}
+
+@media (min-width: 1440px) {
+  .heroHeading {
+    font-size: var(--font-size-900);
+    line-height: var(--line-height-900);
+  }
+}
+
+/* CTA banner: Headline Small/Strong, Headline Medium/Strong at 1440. */
+.bannerHeading {
+  font-size: var(--font-size-400);
+  line-height: var(--line-height-400);
+  font-weight: var(--font-weight-bold);
+}
+
+@media (min-width: 1440px) {
+  .bannerHeading {
+    font-size: var(--font-size-500);
+    line-height: var(--line-height-500);
+  }
+}
+
+/* Form heading: Headline Small/Black, Headline Large/Strong from 960. */
+.formHeading {
+  font-size: var(--font-size-400);
+  line-height: var(--line-height-400);
+  font-weight: var(--font-weight-black);
+}
+
+@media (min-width: 960px) {
+  .formHeading {
+    font-size: var(--font-size-600);
+    line-height: var(--line-height-600);
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+/* Features heading: Headline Small/Black, Headline Large/Strong from 960. */
+.featuresHeading {
+  font-size: var(--font-size-400);
+  line-height: var(--line-height-400);
+  font-weight: var(--font-weight-black);
+}
+
+@media (min-width: 960px) {
+  .featuresHeading {
+    font-size: var(--font-size-600);
+    line-height: var(--line-height-600);
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+/* Feature card title: Title Large/Black, Headline Small/Black from 960 (PLAN C7). */
+.featureTitle {
+  font-size: var(--font-size-300);
+  line-height: var(--line-height-300);
+  font-weight: var(--font-weight-black);
+}
+
+@media (min-width: 960px) {
+  .featureTitle {
+    font-size: var(--font-size-400);
+    line-height: var(--line-height-400);
+  }
+}
+
+/* Spotlight title: Title Large/Black, Headline Medium/Black from 960. */
+.spotlightTitle {
+  font-size: var(--font-size-300);
+  line-height: var(--line-height-300);
+  font-weight: var(--font-weight-black);
+}
+
+@media (min-width: 960px) {
+  .spotlightTitle {
+    font-size: var(--font-size-500);
+    line-height: var(--line-height-500);
+  }
+}
+
+/* Feature and spotlight text: Body Small/Regular, Body Large/Regular from 960 (PLAN C7). */
+.bodyResponsive {
+  font-size: var(--font-size-200);
+  line-height: var(--line-height-200);
+  font-weight: var(--font-weight-regular);
+}
+
+/* Spotlight benefits: Body Small/Strong, Body Large/Strong from 960. */
+.bodyResponsiveStrong {
+  font-size: var(--font-size-200);
+  line-height: var(--line-height-200);
+  font-weight: var(--font-weight-bold);
+}
+
+@media (min-width: 960px) {
+  .bodyResponsive,
+  .bodyResponsiveStrong {
+    font-size: var(--font-size-300);
+    line-height: var(--line-height-300);
+  }
+}
+
+/* Form submit: a detached Figma style, 12/22 caps with tighter tracking (PLAN C9). */
+.submitLabel {
+  font-size: var(--font-size-100);
+  line-height: var(--line-height-300);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-submit);
+  text-transform: uppercase;
+}
+
+/* Figma has no named style for buttons; this is the shared 10/16 caps label. */
+.button {
+  font-size: var(--font-size-050);
+  line-height: var(--line-height-050);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+}
