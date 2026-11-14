@@ -125,4 +125,3 @@ The step 3 agent typed `content.json` with 277 lines: runtime guards, a recursiv
 - **Automate the QA pass:** Playwright screenshots at 360, 960 and 1440 compared against the Figma exports, and axe accessibility checks in CI.
 - **Inline error messages** in the brand's style, once the design system has error colors.
 - **A designed tablet layout** for 600–959px.
-- **Self-host Sequel Sans** if the license allows, so line breaks match Figma.
