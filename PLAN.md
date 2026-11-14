@@ -81,7 +81,7 @@ This is a take-home for a Senior Web Engineer role at DAT. The task is a "Soluti
   - Header height is the same at every width inside a breakpoint (76 / 64 / 64), so `scroll-margin-top` is a simple per-breakpoint value.
   - Between breakpoints the image keeps its size, with dark bands at the sides. Stretching instead would make the nav up to 200px tall at tablet widths.
   - Exception: the 960 footer image shrinks to fit below 960 (see C15).
-- Background colors: the nav band is `#192129` (Figma `fill-navigation-default`, the same gap as C2). The footer band color gets sampled from the export, mapped to the nearest token and recorded in SPEC.
+- Background colors: the nav band is `#192129` (Figma `fill-navigation-default`, the same gap as C2), and the footer band is `#0a0d10` (sampled in step 4, exactly `--color-neutral-1000`). Both are defined as tokens in `tokens.extensions.css` in step 6 and recorded in SPEC "Assumptions & trade-offs".
 - The header stays sticky as the prototype shows: `position: sticky; top: 0` around the image.
 
 **Styling.**
@@ -165,11 +165,11 @@ data/content.json
 | Features | **Horizontal scroller**: CSS `overflow-x: auto` + `scroll-snap`, 328px cards with 40px gap. **Deviation:** cards are 85% wide so the next one peeks; Figma's 100% gives no hint that more cards exist. Left-aligned 20/24 heading. | 3 equal columns, centered 34/36 heading |
 | Spotlights | Media first, then text, for both | Side by side with a 72px gap; `mediaPosition` sets which side |
 | Form | 1 column, checkboxes stacked | 2 columns, checkboxes inline (32px gap) |
-| CTA banner | Stacked, full-width buttons (primary first, as in the 360 frame) | Row: text left, buttons right |
+| CTA banner | **Not sticky:** a regular section at the end of the page, stacked, full-width buttons (primary first, as in the 360 frame). Provisional; revisit before final (Q5). | Sticky. Row: text left, buttons right |
 
 **Sticky behavior (from the prototype annotations).**
 - The header is `position: sticky; top: 0`.
-- `CtaBanner` is `position: sticky; bottom: 0` and placed between `<main>` and `<footer>`. It pins to the viewport bottom, then settles into the flow above the footer. **Zero JS.**
+- `CtaBanner` is placed between `<main>` and `<footer>`. From 960px up it is `position: sticky; bottom: 0`: it pins to the viewport bottom, then settles into the flow above the footer. **Zero JS.** Below 960px it is a regular section at the end of the page (provisional decision, revisit before final; see Q5).
 - Anchor targets get `scroll-margin-top` equal to the nav height, so the form heading isn't hidden under the header.
 
 **Hover, focus and motion** (I'll explain these in SPEC in my own words):
@@ -216,16 +216,16 @@ data/content.json
    - Commit `.claude/settings.json`, the hook script and `CLAUDE.md`: they show how the agent was set up, which counts toward "AI fluency". Decide whether the raw `.jsonl` log is committed or gitignored (it may contain more than reviewers need).
 2. **Scaffold:** run `create-next-app@latest` (TS, ESLint, App Router, no Tailwind, no src dir) into a **temp dir**, then copy the configs in so README and SPEC aren't overwritten. Confirm `strict: true` and add `noUncheckedIndexedAccess`. Delete `index.html` and `script.js`. Confirm a clean `build`. **Done:** Next.js 16.4.6 with React 19.3, which needs Node 20.9 or newer.
 3. **Content contract:** `types/content.ts` mirrors `content.json`; `getContent()` in `lib/content.ts` returns it with one `as Content` assertion; the layout's meta description comes from `hero.subheading`. **Done.** A first version added runtime guards, a generic `Widen<T>` type, 7 `node --test` tests and config changes (`engines`, `"type": "module"`, a tsconfig flag). I removed them on review: they guarded a fixed file in this repo. This led to the "Keep it simple" rules in `CLAUDE.md`.
-4. **Assets (risk: Figma URLs expire in 7 days):** export every image (hero composite, 3 feature shots, 2 spotlight screenshots and backgrounds, gradient SVG, icons). Also export the nav (1440, 960, 360) and footer (1440, 960) at 2x. Give them meaningful names under `assets/images` (for example `nav-1440@2x.png`), and sample the footer's edge color. **Done:** 14 files in `assets/images` (4.2 MB): nav and footer renders at 2x, the original image fills for the hero, the 3 screenshots and the truck-stop photo, plus SVGs for 2 icons and the hero shapes (Figma's page-background rects stripped). The two spotlights reuse the load board and RateView screenshots over the same photo, so the parts are kept rather than flattened composites. Footer edge `#0a0d10` = `--color-neutral-1000`; nav edge `#192129` (C2).
+4. **Assets (risk: Figma URLs expire in 7 days):** export every image (hero composite, 3 feature shots, 2 spotlight screenshots and backgrounds, gradient SVG, icons). Also export the nav (1440, 960, 360) and footer (1440, 960) at 2x. Give them meaningful names under `assets/images` (for example `nav-1440@2x.png`), and sample the footer's edge color. **Done:** 12 files in `assets/images` (4.2 MB): nav and footer renders at 2x, the original image fills for the hero, the 3 screenshots and the truck-stop photo, plus SVGs for 2 icons (Figma's page-background rects stripped). The two spotlights reuse the load board and RateView screenshots over the same photo, so the parts are kept rather than flattened composites. No hero-background SVG: it becomes a token in `tokens.extensions.css` in step 10. Sampled edge colors (footer `#0a0d10` = `--color-neutral-1000`, nav `#192129`, see C2) become tokens in step 6.
 5. **Token layer:** extensions, typography module, globals, focus ring. Check them on a scratch section.
 6. **Page shell + sticky behavior (risk: the prototype's main idea):** `ArtDirectedImage`, then the sticky header (nav image), `main`, the sticky `CtaBanner`, and the footer image. Check three things:
    - The right image appears at each breakpoint (look at the Network panel: only one image downloads per breakpoint).
    - The header stays pinned while scrolling.
-   - The banner pins to the bottom and then settles above the footer at every breakpoint.
+   - From 960px up, the banner pins to the bottom and then settles above the footer. Below 960px it sits in the flow at the end of the page.
 7. **AuthorityForm (highest interaction risk):** fields, floating labels (including selects), validation, no-reload submit, success state, two- to one-column layout.
 8. **Features (risk: mobile scroller):** grid ↔ scroll-snap, keyboard scrolling.
 9. **Spotlight:** media composition (dark panel, 20% photo, inset screenshot), `mediaPosition`, mobile stacking.
-10. **Hero:** gradient background, callout, image, three type sizes.
+10. **Hero:** gradient background (defined as a token in `tokens.extensions.css`, no SVG), callout, image, three type sizes.
 11. **Section dividers + full responsive pass** at 320, 360, 600, 960, 1280, 1440 and 1920.
 > **Each step runs in a fresh session via `/build-step`** (`.claude/skills/build-step/SKILL.md`), which marks the step `**Done:**` here when finished.
 >
@@ -267,7 +267,7 @@ The agent rules live in [`CLAUDE.md`](CLAUDE.md), the only copy. (This section u
 2. **Mobile feature copy** in the 360 frame ("Evaluate bids…", "Make & send awards") differs from content.json. Is content.json canonical?
 3. **Select options** for Company Type, State (US only, or US + Canada?) and Transportation Role.
 4. **"Authority Needed?"**: multi-select checkboxes as drawn, or a single choice (radio)?
-5. **Sticky banner on mobile** is 236px tall (about 35% of a phone screen). Keep it sticky on mobile, make it dismissible, or hide it when the form is in view?
+5. **Sticky banner on mobile** is 236px tall (about 35% of a phone screen). Keep it sticky on mobile, make it dismissible, or hide it when the form is in view? **Provisional decision (mine):** below 960px it's a regular section at the end of the page. Revisit before the final submission.
 6. **Footer on mobile:** there's no 360 footer, so the 960 footer image is scaled down on phones. Is that acceptable for a placeholder? (If I get to the optional HTML nav: should the hamburger open a menu, given that no open state is designed?)
 7. **Submit button** styling (solid, 12px) differs from the shared primary button. Is that intentional?
 8. **Success state:** is there preferred confirmation copy after submit?
@@ -310,14 +310,13 @@ Each SPEC section, what the template asks, and where the plan already supplies t
   - C5 radius naming trap.
   - C10 the 29px gap snapped to 24px.
   - C14 no error color, so native validation messages.
-  - The nav band and footer band background colors.
 
 ### Interaction & UX decisions *(written by me)*
 *Asks:* what I decided where the design is silent, and why. Source material is in §5; I write the reasoning.
 - Focus ring: token, keyboard-only, contrast on dark surfaces.
 - Hover per button variant, and **no hover on non-clickable cards**.
 - Reduced motion.
-- Sticky header and banner from the prototype, done in CSS only.
+- Sticky header and banner from the prototype, done in CSS only; banner not sticky below 960px (provisional).
 - Mobile feature scroller with a peek (a deviation from Figma).
 - Floating labels (real `<label>`s, not placeholders).
 - Native validation, no reload on submit, success message.
@@ -335,6 +334,8 @@ Each SPEC section, what the template asks, and where the plan already supplies t
 - **Placeholder data:** select options, the success message, and images kept in `lib/media.ts` because the CMS sends none (C11–C13).
 - **Checkboxes** kept for "Authority Needed?" (C12).
 - **Breakpoints:** 960 and 1440; the mobile layout continues through the undesigned 600–959 range.
+- **New tokens in `tokens.extensions.css`**, each listed once it's defined: the nav and footer band colors (step 6) and the hero background gradient (step 10).
+- **Sticky banner on mobile:** a regular end-of-page section below 960px. Provisional; revisit before final (Q5).
 - **Testing kept small:** no Playwright or React Testing Library.
 - **Hiring manager:** list which questions (§10) were answered, and how.
 
@@ -345,6 +346,6 @@ Each SPEC section, what the template asks, and where the plan already supplies t
 - Real CMS fetch with `revalidate`, typed images and alt text coming from the CMS.
 - Visual regression (Playwright screenshots at 360, 960 and 1440 against the Figma exports) and automated a11y checks (axe in CI).
 - Custom inline error messages once the design system has error tokens.
-- Sticky banner: dismissible, or hidden when the form is in view (pending Q5).
+- Sticky banner on mobile: final decision pending Q5 (currently a regular end-of-page section below 960px).
 - A designed tablet breakpoint.
 - Self-hosting Sequel Sans if licensed, to close the font gap.
