@@ -2,8 +2,6 @@
   display: flex;
   justify-content: center;
   padding: var(--space-600);
-  /* Keeps the heading clear of the sticky nav (76px tall below 960) when the hero CTA jumps here. */
-  scroll-margin-top: 76px;
 }
 
 /* Figma's 576px width, shrinking on narrow screens; the section's flex centers it. */
