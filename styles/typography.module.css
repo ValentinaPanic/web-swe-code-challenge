@@ -76,6 +76,27 @@
   sit inside a media query).
 */
 
+/* Hero h1: Headline Large/Black, Display Small/Strong from 960, Display Medium/Strong at 1440. */
+.heroHeading {
+  font-size: var(--font-size-600);
+  line-height: var(--line-height-600);
+  font-weight: var(--font-weight-black);
+}
+
+@media (min-width: 960px) {
+  .heroHeading {
+    font-size: var(--font-size-700);
+    line-height: var(--line-height-700);
+  }
+}
+
+@media (min-width: 1440px) {
+  .heroHeading {
+    font-size: var(--font-size-900);
+    line-height: var(--line-height-900);
+  }
+}
+
 /* CTA banner: Headline Small/Strong, Headline Medium/Strong at 1440. */
 .bannerHeading {
   font-size: var(--font-size-400);

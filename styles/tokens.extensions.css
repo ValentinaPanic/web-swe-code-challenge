@@ -53,6 +53,15 @@
   --gradient-brand: linear-gradient(90deg, var(--color-primary-500), #9900e0);
 
   /*
+    Not in DS: from the Figma hero "gradient" frame, two primary-100 shapes
+    blurred by 175px off the top-left and bottom-right corners. Two radial
+    gradients draw the same glow without shipping the SVG.
+  */
+  --gradient-hero:
+    radial-gradient(700px 600px at 0 0, var(--color-primary-100), transparent),
+    radial-gradient(700px 600px at 100% 100%, var(--color-primary-100), transparent);
+
+  /*
     Not in DS or Figma (design decision): upward shadow that separates the
     sticky banner from the content scrolling under it, including the dark footer.
   */

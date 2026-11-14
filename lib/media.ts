@@ -1,6 +1,7 @@
 // content.json has no images, so media and alt text live here (PLAN C13).
 import footer1440 from '@/assets/images/footer-1440@2x.png';
 import footer960 from '@/assets/images/footer-960@2x.png';
+import heroProduct from '@/assets/images/hero-product.png';
 import nav1440 from '@/assets/images/nav-1440@2x.png';
 import nav360 from '@/assets/images/nav-360@2x.png';
 import nav960 from '@/assets/images/nav-960@2x.png';
@@ -24,7 +25,12 @@ export const footerImage = {
   at1440: footer1440,
 };
 
-const loadBoardImage = { src: loadBoard, alt: 'DAT One load board search results' };
+export const heroImage = {
+  src: heroProduct,
+  alt: 'RateView lane analytics on desktop and DAT One load search on mobile',
+};
+
+const loadBoardImage ={ src: loadBoard, alt: 'DAT One load board search results' };
 const rateViewImage = { src: rateView, alt: 'RateView lane rate analytics' };
 
 // In the same order as content.features.items.
