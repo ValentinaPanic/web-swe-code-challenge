@@ -5,10 +5,10 @@
   background: var(--gradient-hero);
 }
 
-/* Mobile: text, then callout, then image. 1216px is the 1440 frame's content width. */
+/* Mobile: text, then callout, then image. */
 .container {
   display: flex;
-  flex: 0 1 1216px;
+  flex: 0 1 var(--content-max-width);
   flex-direction: column;
   gap: var(--space-1200);
 }

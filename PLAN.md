@@ -15,8 +15,6 @@ This is a take-home for a Senior Web Engineer role at DAT. The task is a "Soluti
 | AI fluency | A selection of representative prompts in SPEC.md, kept up after each step (§11). CLAUDE.md and the AI-log hook show how the agent was set up and coached. |
 | Appropriate scope | Server Components by default, statically prerendered. Client JS only for the form. No `useEffect`. Nav and footer are static images, so the effort goes where reviewers are looking: everything between them. |
 
-> **Note:** the working-tree `CHALLENGE.md` is newer than the committed one and is uncommitted. It adds the CORS requirement, "AI is required", and nav and footer allowed as images. Build against the working-tree version, and commit it first so the repo shows the brief I worked to.
-
 ---
 
 ## 1. Starter files: what they signal and how to handle them
@@ -78,7 +76,7 @@ This is a take-home for a Senior Web Engineer role at DAT. The task is a "Soluti
 - Export from Figma at 2x: nav at 1440 (`1:4068`), 960 (`1:667`) and 360 (`1:795`); footer at 1440 (`1:4153`) and 960 (`1:793`).
 - Render with art direction: a `<picture>` element with one `<source media>` per breakpoint. Build it with `getImageProps()` from `next/image` (part of Next, no extra library), so each source still gets optimized `srcset`s and fixed dimensions.
 - **Sizing rule** (the same for every source): show at most the image's own width, centered on a dark full-width background that matches the image's edge color.
-  - Header height is the same at every width inside a breakpoint (76 / 64 / 64), so `scroll-margin-top` is a simple per-breakpoint value.
+  - Header height is the same at every width inside a breakpoint (76 / 64 / 64), so the top `scroll-padding` is a simple per-breakpoint value (`--nav-height`).
   - Between breakpoints the image keeps its size, with dark bands at the sides. Stretching instead would make the nav up to 200px tall at tablet widths.
   - Exception: the 960 footer image shrinks to fit below 960 (see C15).
 - Background colors: the nav band is `--color-background-inverse` (`#192129`, Figma Background/Inverse, the same gap as C2, defined in `tokens.extensions.css` in step 6). The footer band is `--color-neutral-1000` directly (sampled in step 4 as exactly `#0a0d10`, so it needs no new token).
@@ -177,7 +175,7 @@ data/content.json
 **Sticky behavior (from the prototype annotations).**
 - The header is `position: sticky; top: 0`.
 - `CtaBanner` is placed after `<footer>`, as the last element on the page. At every width it is `position: sticky; bottom: 0`, so it stays pinned to the viewport bottom the whole way down, footer included, and at the very end it sits below the footer instead of covering it. **Zero JS.** (Q5 decided: sticky on mobile too.)
-- Anchor targets get `scroll-margin-top` equal to the nav height, so the form heading isn't hidden under the header.
+- `html` gets `scroll-padding-block` equal to the nav height (top) and the banner height (bottom), so anchor targets and focused controls aren't hidden under either (WCAG 2.2 Focus Not Obscured).
 
 **Hover, focus and motion** (I'll explain these in SPEC in my own words):
 - **Focus:** every interactive element gets `:focus-visible` with a `--border-weight-focus` (4px, the DS supplies it) outline in `--color-primary-300` and a 2px offset. On dark surfaces it switches to `--color-primary-200` for contrast. It is keyboard-only, so mouse users don't see rings.

@@ -30,7 +30,6 @@ export function AuthorityForm({ form }: { form: AuthorityFormContent }) {
     event.currentTarget.reset();
     setSubmitted(true);
   }
-
   return (
     <section id={form.id} className={styles.section} aria-labelledby={headingId}>
       <form className={styles.form} onSubmit={handleSubmit}>

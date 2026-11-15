@@ -20,7 +20,7 @@ export const heroImage = {
   alt: 'RateView lane analytics on desktop and DAT One load search on mobile',
 };
 
-const loadBoardImage ={ src: loadBoard, alt: 'DAT One load board search results' };
+const loadBoardImage = { src: loadBoard, alt: 'DAT One load board search results' };
 const rateViewImage = { src: rateView, alt: 'RateView lane rate analytics' };
 
 // In the same order as content.features.items.

@@ -65,4 +65,17 @@
     sticky banner from the content scrolling under it, including the dark footer.
   */
   --shadow-sticky-bottom: 0 -4px 16px color-mix(in srgb, var(--color-neutral-900) 40%, transparent);
+
+  /* Not in DS: content width, from the Figma 1440 frame (1440 minus 112px each side). */
+  --content-max-width: 1216px;
+
+  /* Not in DS: sticky nav height, from the Figma 360 nav frame (76px); 64px from 960 below. */
+  --nav-height: 76px;
+}
+
+@media (min-width: 960px) {
+  :root {
+    /* Figma 960 and 1440 nav frames. */
+    --nav-height: 64px;
+  }
 }

@@ -46,7 +46,6 @@
   /* Figma: 76px at 960, 72 at 1440. One value, on the spacing scale. */
   .section {
     padding-block: var(--space-1800);
-    scroll-margin-top: 64px;
   }
 
   .fields {
