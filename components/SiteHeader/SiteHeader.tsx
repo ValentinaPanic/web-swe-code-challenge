@@ -28,8 +28,13 @@ function NavItems({ nav }: { nav: Nav }) {
       {/* Search isn't in content.json and has no behavior, so it's decorative. */}
       <Image src={searchIcon} alt="" className={styles.search} />
       <div className={styles.actions}>
+        {/* Figma draws the nav's primary action solid blue, not the brand gradient; content.json stays unchanged. */}
         {nav.actions.map((action) => (
-          <Button key={action.label} variant={action.variant} href={action.href}>
+          <Button
+            key={action.label}
+            variant={action.variant === 'primary' ? 'solid' : action.variant}
+            href={action.href}
+          >
             {action.label}
           </Button>
         ))}
