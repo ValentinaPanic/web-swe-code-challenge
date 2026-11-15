@@ -2,22 +2,12 @@
 import footer1440 from '@/assets/images/footer-1440@2x.png';
 import footer960 from '@/assets/images/footer-960@2x.png';
 import heroProduct from '@/assets/images/hero-product.png';
-import nav1440 from '@/assets/images/nav-1440@2x.png';
-import nav360 from '@/assets/images/nav-360@2x.png';
-import nav960 from '@/assets/images/nav-960@2x.png';
 import truckStop from '@/assets/images/photo-truck-stop.png';
 import contractBid from '@/assets/images/screenshot-contract-bid.png';
 import loadBoard from '@/assets/images/screenshot-load-board.png';
 import rateView from '@/assets/images/screenshot-rateview.png';
 
-// Nav and footer are placeholder renders the brief allows; alt text doesn't promise working links.
-export const navImage = {
-  alt: 'DAT Freight & Analytics',
-  base: nav360,
-  at960: nav960,
-  at1440: nav1440,
-};
-
+// The footer is a placeholder render the brief allows; alt text doesn't promise working links.
 // No 360 footer exists, so the 960 render scales down below 960 (PLAN C15).
 export const footerImage = {
   alt: 'DAT site footer',

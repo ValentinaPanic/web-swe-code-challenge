@@ -38,6 +38,16 @@
   opacity: 0.3;
 }
 
+/* Figma nav "Login": a light border on dark surfaces; hover fills faintly (PLAN §5). */
+.outline {
+  padding-inline: var(--space-600);
+  border: 1px solid var(--color-neutral-050);
+}
+
+.outline:hover {
+  background: color-mix(in srgb, var(--color-neutral-000) 15%, transparent);
+}
+
 /* Figma "light ghost": text only, for dark surfaces. */
 .ghost {
   /* Figma hugs the text; the padding keeps the pill focus ring off the letters. */
@@ -52,5 +62,9 @@
 @media (prefers-reduced-motion: no-preference) {
   .primary::after {
     transition: opacity 150ms;
+  }
+
+  .outline {
+    transition: background-color 150ms;
   }
 }

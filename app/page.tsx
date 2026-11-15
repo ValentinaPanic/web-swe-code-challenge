@@ -10,11 +10,11 @@ import { getContent } from '@/lib/content';
 import styles from './page.module.css';
 
 export default async function Home() {
-  const { hero, features, spotlights, authorityForm, cta } = await getContent();
+  const { nav, hero, features, spotlights, authorityForm, cta } = await getContent();
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader nav={nav} />
       <main>
         <Hero hero={hero} />
         {/* One divider rule at every width: between every pair of sections (PLAN C8). */}

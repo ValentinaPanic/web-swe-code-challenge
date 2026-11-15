@@ -208,3 +208,17 @@
   letter-spacing: var(--letter-spacing-caps);
   text-transform: uppercase;
 }
+
+/* Nav links: 16/28 (Headline Medium line height, from the 960 frame), Headline Small at 1440. */
+.navLink {
+  font-size: var(--font-size-300);
+  line-height: var(--line-height-500);
+  font-weight: var(--font-weight-regular);
+}
+
+@media (min-width: 1440px) {
+  .navLink {
+    font-size: var(--font-size-400);
+    line-height: var(--line-height-400);
+  }
+}

@@ -184,7 +184,7 @@ data/content.json
 - **Primary (gradient) button:** darkens on hover through a `::after` overlay with opacity (gradients can't transition). `:active` darkens further.
 - **Outline button:** on hover it fills with `--color-neutral-000` at low opacity or shifts the border to white.
 - **Ghost button:** underlines on hover.
-- **Nav and footer:** these are images for now, so they have no hover or focus states. If step 13 happens: nav links underline on hover, and the current page gets `aria-current="page"` with the designed bold underline.
+- **Nav and footer:** the footer is an image for now, so it has no hover or focus states. The nav (built in step 13): nav links underline on hover, and the current page gets `aria-current="page"` with the designed bold underline.
 - **Inputs:** on hover the border goes to `--color-neutral-600`. On focus the border is `--color-primary-500`, plus the focus ring.
 - **Feature cards and spotlight media are not links**, so they get **no hover effect**. Fake hover would suggest they're clickable.
 - `scroll-behavior: smooth` and the 150ms transitions apply only under `prefers-reduced-motion: no-preference`.
@@ -201,7 +201,7 @@ data/content.json
 
 ## 6. Accessibility and semantic HTML
 
-- **Landmarks:** `header`, `main`, `aside[aria-labelledby]` (banner), `footer`. There is **no `<nav>` while the nav is an image**: a `nav` landmark without real links would mislead screen-reader users. It comes back with real links in step 13. Each content block is a `section` with `aria-labelledby` pointing at its heading.
+- **Landmarks:** `header`, `main`, `aside[aria-labelledby]` (banner), `footer`. The HTML nav (step 13) adds `nav[aria-label="Main"]` inside the header. Each content block is a `section` with `aria-labelledby` pointing at its heading.
 - **Headings:**
   - `h1` "Solutions for Freight Brokers".
   - `h2` for: features heading, each spotlight title, "Get Your Authority", "Get started today".
@@ -243,6 +243,7 @@ data/content.json
 12. **QA pass** (§8), then polish README and SPEC, push to GitHub, add the reviewer as a collaborator if the repo is private. **The submission is complete at this point.** **Done (QA and docs; push pending):** all §8 checks run (lint, typecheck, build static, hex grep, client scope, Nu validator, headless Chrome at 7 widths, behavior, Lighthouse a11y 100). Three fixes: the select placeholder `<option>` gets `label=" "` (an empty option is invalid HTML), DAT's favicon as `app/icon.png` fixes the `/favicon.ico` 404 (the only console error), and the hero image gets `fetchPriority="high"` (Lighthouse LCP hint). README written; SPEC gained the rendering, form, testing, validator and favicon trade-offs and "If I had more time". The push waits for the author: `origin` is DAT's starter repo. Not done: VoiceOver, the manual keyboard pass and the side-by-side with Figma.
 13. **Optional, only if time remains: replace the images with real HTML**, one at a time, each in its own commit so it can be dropped.
     - **Nav first** (smaller, and it's on screen the whole time): build `SiteHeader` from `content.nav` inside `header > nav[aria-label="Main"]`. Chevrons are decorative and dropdowns don't open. The current page gets `aria-current="page"`. Below 960 a hamburger needs a small client `MobileMenu` (one `useState` with `aria-expanded`), and its open state isn't designed (Q6).
+      **Done (nav only; footer not built):** `SiteHeader` takes `{ nav }` and renders `header > nav[aria-label="Main"]` with the Figma logo SVG, links (decorative chevron as a CSS mask in the link's color, `aria-current="page"` with bold underline, underline on hover), a decorative search icon, and Login/Sign up through `Button` (new `outline` variant). Below 960 the menu is a JS-free `<details>`/`<summary>` (decided instead of a client `MobileMenu`, so the page keeps one client component): the links and buttons stack in an undesigned panel under the bar. The three nav PNGs and `navImage` are removed; `navLink` role class added.
     - **Footer next**: build it from `content.footer` (columns as lists of links, social links, legal links, copyright). This also gives the missing mobile footer a readable layout.
     - Remove each image export and its `lib/media.ts` entry once its HTML version replaces it, and update SPEC.
 
