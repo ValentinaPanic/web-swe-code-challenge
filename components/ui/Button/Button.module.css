@@ -48,14 +48,14 @@
   opacity: 0.3;
 }
 
-/* Figma's solid blue (nav "Sign up"); same fill and hover as the form submit. */
+/* Figma's solid blue (nav "Sign up", form submit). Hover lightens; press darkens. */
 .solid {
   padding-inline: var(--space-600);
   background: var(--color-primary-500);
 }
 
 .solid:hover {
-  background: var(--color-primary-600);
+  background: var(--color-primary-400);
 }
 
 .solid:active {
