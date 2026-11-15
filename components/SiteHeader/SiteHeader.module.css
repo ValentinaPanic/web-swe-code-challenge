@@ -13,14 +13,14 @@
   outline-color: var(--color-primary-200);
 }
 
-/* Heights from the nav frames: 76 at 360, 64 from 960. Content stays at 1440 width beyond it. */
+/* Content stays at 1440 width beyond it. */
 .nav {
   display: flex;
   flex: 0 1 1440px;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-600);
-  min-height: 76px;
+  min-height: var(--nav-height);
   padding-inline: var(--space-400);
 }
 
@@ -112,7 +112,6 @@
 @media (min-width: 960px) {
   .nav {
     gap: var(--space-1200);
-    min-height: 64px;
     padding-inline: var(--space-600);
   }
 
