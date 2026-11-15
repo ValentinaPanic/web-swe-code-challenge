@@ -34,6 +34,21 @@ img {
   outline-offset: 2px;
 }
 
+/*
+  Keeps focused controls and anchor targets clear of the sticky nav (top) and
+  sticky banner (bottom), per WCAG 2.2 Focus Not Obscured. The bottom values
+  are the rendered banner heights at the narrowest width of each range.
+*/
+html {
+  scroll-padding-block: var(--nav-height) 233px;
+}
+
+@media (min-width: 960px) {
+  html {
+    scroll-padding-block: var(--nav-height) 136px;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;

@@ -15,8 +15,6 @@ This is a take-home for a Senior Web Engineer role at DAT. The task is a "Soluti
 | AI fluency | A selection of representative prompts in SPEC.md, kept up after each step (§11). CLAUDE.md and the AI-log hook show how the agent was set up and coached. |
 | Appropriate scope | Server Components by default, statically prerendered. Client JS only for the form. No `useEffect`. Nav and footer are static images, so the effort goes where reviewers are looking: everything between them. |
 
-> **Note:** the working-tree `CHALLENGE.md` is newer than the committed one and is uncommitted. It adds the CORS requirement, "AI is required", and nav and footer allowed as images. Build against the working-tree version, and commit it first so the repo shows the brief I worked to.
-
 ---
 
 ## 1. Starter files: what they signal and how to handle them
@@ -49,7 +47,7 @@ This is a take-home for a Senior Web Engineer role at DAT. The task is a "Soluti
 | C6 | **Mobile feature copy differs**. At 360, cards 1 and 2 say "Evaluate bids using embedded RateView insights…" and "Make & send awards…". Card 3 matches the desktop copy. | `content.json` wins: one content source across breakpoints. The 360 copy looks like stale design copy. | Yes |
 | C7 | **Inconsistent mobile card type**. At 360, cards 1 and 2 use 16/22 titles with 14/20 body, while card 3 uses 20/24 with 16/22. | Use 16/22 + 14/20 for all mobile cards (the majority, and consistent). | No |
 | C8 | **Divider lines vary by breakpoint**. 1440: under hero, spot1/spot2, spot2/form. 960: features/spot1, spot2/form. 360: features/spot1, spot1/spot2, spot2/form. | Use one rule at all sizes: a divider between every pair of sections (hero, features, spot1, spot2, form): the 360 set plus 1440's line under the hero (added after step 11). Inset per breakpoint from the frames (16 / 48 / 62 px, the 62 snapped to 64 on the spacing scale). Wider than 1440 the line keeps its 1440 length, centered (decided in step 11). | Low |
-| C9 | **Submit button** is a detached style: solid `#0046e0`, 12px, 0.6px tracking, full width. Every other primary button uses the gradient at 10px with 1.5px caps tracking. | Match Figma with a plain `<button>` styled in `AuthorityForm` plus a `submitLabel` typography class (decided in step 7: it's used once, and its type, tracking and fill share almost nothing with `Button`). | Low |
+| C9 | **Submit button** is a detached style: solid `#0046e0`, 12px, 0.6px tracking, full width. Every other primary button uses the gradient at 10px with 1.5px caps tracking. | Revised after step 13: the nav's Sign up uses the same solid fill and 12px label, so both use `Button` with `variant="solid"` and `size="large"` (12/16, 1.5px caps tracking from the nav). `Button` renders a `<button>` when it has no `href`. The submit's 0.6px tracking and 22px line height are dropped. | Low |
 | C10 | **Form row gap is 29px** (the rest of the file sits on an 8px grid). The form section's vertical padding is also 76px at 960 but 72px at 1440. | Use `--space-600` (24px; spacing names follow Figma's `cg-spacing-200` = 8, so 100 = 4px) for the gap, and `--space-1800` (72px) for the padding from 960 up. Likely nudges in Figma, and 4–5px is below what reviewers would notice. | No |
 | C11 | **Select options are missing** (Company Type, State, Transportation Role). | `lib/formOptions.ts` with US states + DC, plus clearly labelled placeholder options for the other two. | Yes |
 | C12 | **"Authority Needed?"** is drawn as square checkboxes, but the legend reads like a single choice. | Use checkboxes as designed, inside `fieldset`/`legend`. Multiple answers are plausible. | Yes |
@@ -78,7 +76,7 @@ This is a take-home for a Senior Web Engineer role at DAT. The task is a "Soluti
 - Export from Figma at 2x: nav at 1440 (`1:4068`), 960 (`1:667`) and 360 (`1:795`); footer at 1440 (`1:4153`) and 960 (`1:793`).
 - Render with art direction: a `<picture>` element with one `<source media>` per breakpoint. Build it with `getImageProps()` from `next/image` (part of Next, no extra library), so each source still gets optimized `srcset`s and fixed dimensions.
 - **Sizing rule** (the same for every source): show at most the image's own width, centered on a dark full-width background that matches the image's edge color.
-  - Header height is the same at every width inside a breakpoint (76 / 64 / 64), so `scroll-margin-top` is a simple per-breakpoint value.
+  - Header height is the same at every width inside a breakpoint (76 / 64 / 64), so the top `scroll-padding` is a simple per-breakpoint value (`--nav-height`).
   - Between breakpoints the image keeps its size, with dark bands at the sides. Stretching instead would make the nav up to 200px tall at tablet widths.
   - Exception: the 960 footer image shrinks to fit below 960 (see C15).
 - Background colors: the nav band is `--color-background-inverse` (`#192129`, Figma Background/Inverse, the same gap as C2, defined in `tokens.extensions.css` in step 6). The footer band is `--color-neutral-1000` directly (sampled in step 4 as exactly `#0a0d10`, so it needs no new token).
@@ -177,14 +175,14 @@ data/content.json
 **Sticky behavior (from the prototype annotations).**
 - The header is `position: sticky; top: 0`.
 - `CtaBanner` is placed after `<footer>`, as the last element on the page. At every width it is `position: sticky; bottom: 0`, so it stays pinned to the viewport bottom the whole way down, footer included, and at the very end it sits below the footer instead of covering it. **Zero JS.** (Q5 decided: sticky on mobile too.)
-- Anchor targets get `scroll-margin-top` equal to the nav height, so the form heading isn't hidden under the header.
+- `html` gets `scroll-padding-block` equal to the nav height (top) and the banner height (bottom), so anchor targets and focused controls aren't hidden under either (WCAG 2.2 Focus Not Obscured).
 
 **Hover, focus and motion** (I'll explain these in SPEC in my own words):
 - **Focus:** every interactive element gets `:focus-visible` with a `--border-weight-focus` (4px, the DS supplies it) outline in `--color-primary-300` and a 2px offset. On dark surfaces it switches to `--color-primary-200` for contrast. It is keyboard-only, so mouse users don't see rings.
 - **Primary (gradient) button:** darkens on hover through a `::after` overlay with opacity (gradients can't transition). `:active` darkens further.
 - **Outline button:** on hover it fills with `--color-neutral-000` at low opacity or shifts the border to white.
 - **Ghost button:** underlines on hover.
-- **Nav and footer:** these are images for now, so they have no hover or focus states. If step 13 happens: nav links underline on hover, and the current page gets `aria-current="page"` with the designed bold underline.
+- **Nav and footer:** the footer is an image for now, so it has no hover or focus states. The nav (built in step 13): nav links underline on hover, and the current page gets `aria-current="page"` with the designed bold underline.
 - **Inputs:** on hover the border goes to `--color-neutral-600`. On focus the border is `--color-primary-500`, plus the focus ring.
 - **Feature cards and spotlight media are not links**, so they get **no hover effect**. Fake hover would suggest they're clickable.
 - `scroll-behavior: smooth` and the 150ms transitions apply only under `prefers-reduced-motion: no-preference`.
@@ -201,7 +199,7 @@ data/content.json
 
 ## 6. Accessibility and semantic HTML
 
-- **Landmarks:** `header`, `main`, `aside[aria-labelledby]` (banner), `footer`. There is **no `<nav>` while the nav is an image**: a `nav` landmark without real links would mislead screen-reader users. It comes back with real links in step 13. Each content block is a `section` with `aria-labelledby` pointing at its heading.
+- **Landmarks:** `header`, `main`, `aside[aria-labelledby]` (banner), `footer`. The HTML nav (step 13) adds `nav[aria-label="Main"]` inside the header. Each content block is a `section` with `aria-labelledby` pointing at its heading.
 - **Headings:**
   - `h1` "Solutions for Freight Brokers".
   - `h2` for: features heading, each spotlight title, "Get Your Authority", "Get started today".
@@ -243,6 +241,7 @@ data/content.json
 12. **QA pass** (§8), then polish README and SPEC, push to GitHub, add the reviewer as a collaborator if the repo is private. **The submission is complete at this point.** **Done (QA and docs; push pending):** all §8 checks run (lint, typecheck, build static, hex grep, client scope, Nu validator, headless Chrome at 7 widths, behavior, Lighthouse a11y 100). Three fixes: the select placeholder `<option>` gets `label=" "` (an empty option is invalid HTML), DAT's favicon as `app/icon.png` fixes the `/favicon.ico` 404 (the only console error), and the hero image gets `fetchPriority="high"` (Lighthouse LCP hint). README written; SPEC gained the rendering, form, testing, validator and favicon trade-offs and "If I had more time". The push waits for the author: `origin` is DAT's starter repo. Not done: VoiceOver, the manual keyboard pass and the side-by-side with Figma.
 13. **Optional, only if time remains: replace the images with real HTML**, one at a time, each in its own commit so it can be dropped.
     - **Nav first** (smaller, and it's on screen the whole time): build `SiteHeader` from `content.nav` inside `header > nav[aria-label="Main"]`. Chevrons are decorative and dropdowns don't open. The current page gets `aria-current="page"`. Below 960 a hamburger needs a small client `MobileMenu` (one `useState` with `aria-expanded`), and its open state isn't designed (Q6).
+      **Done (nav only; footer not built):** `SiteHeader` takes `{ nav }` and renders `header > nav[aria-label="Main"]` with the Figma logo SVG, links (decorative chevron as a CSS mask in the link's color, `aria-current="page"` with bold underline, underline on hover), a decorative search icon, and Login/Sign up through `Button` (new `outline` variant). Below 960 the menu is a JS-free `<details>`/`<summary>` (decided instead of a client `MobileMenu`, so the page keeps one client component): the links and buttons stack in an undesigned panel under the bar. The three nav PNGs and `navImage` are removed; `navLink` role class added.
     - **Footer next**: build it from `content.footer` (columns as lists of links, social links, legal links, copyright). This also gives the missing mobile footer a readable layout.
     - Remove each image export and its `lib/media.ts` entry once its HTML version replaces it, and update SPEC.
 

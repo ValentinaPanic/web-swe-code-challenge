@@ -1,9 +1,147 @@
-/* Prototype: sticky nav. The band fills the sides wherever the viewport is wider than the image. */
+/* Prototype: sticky nav. Sticky also anchors the absolutely positioned mobile panel. */
 .header {
   position: sticky;
   top: 0;
   z-index: 1;
   display: flex;
   justify-content: center;
+  color: var(--color-neutral-050);
   background: var(--color-background-inverse);
+}
+
+.header :focus-visible {
+  outline-color: var(--color-primary-200);
+}
+
+/* Content stays at 1440 width beyond it. */
+.nav {
+  display: flex;
+  flex: 0 1 1440px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-600);
+  min-height: var(--nav-height);
+  padding-inline: var(--space-400);
+}
+
+.logo {
+  width: 196px;
+  height: auto;
+}
+
+.desktop {
+  display: none;
+}
+
+.links {
+  display: flex;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  composes: navLink from '../../styles/typography.module.css';
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-200);
+  color: var(--color-neutral-300);
+  text-decoration: none;
+  text-underline-offset: 4px;
+}
+
+.link:hover,
+.link[aria-current='page'] {
+  text-decoration: underline;
+}
+
+.link[aria-current='page'] {
+  color: var(--color-neutral-050);
+  font-weight: var(--font-weight-bold);
+}
+
+/* A mask so the chevron takes the link's color in every state. */
+.link[data-menu]::after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  background: currentColor;
+  mask: url('../../assets/images/icon-expand-more.svg') no-repeat center;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-400);
+}
+
+/* Mobile menu: not designed (Q6). Links stack in a panel under the bar. */
+.menuButton {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.menuButton::-webkit-details-marker {
+  display: none;
+}
+
+.panel {
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-600);
+  padding: var(--space-400) var(--space-400) var(--space-600);
+  background: var(--color-background-inverse);
+  border-top: 1px solid var(--color-neutral-700);
+}
+
+.panel .links {
+  flex-direction: column;
+  gap: var(--space-200);
+}
+
+.panel .search {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  .nav {
+    gap: var(--space-1200);
+    padding-inline: var(--space-600);
+  }
+
+  .logo {
+    width: 169px;
+  }
+
+  .menu {
+    display: none;
+  }
+
+  .desktop,
+  .links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-400);
+  }
+}
+
+@media (min-width: 1440px) {
+  .nav {
+    padding-inline: var(--space-1200);
+  }
+
+  .logo {
+    width: 206px;
+  }
+
+  .desktop,
+  .links {
+    gap: var(--space-1200);
+  }
 }
