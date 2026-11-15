@@ -37,36 +37,9 @@
   gap: var(--space-400);
 }
 
-/* Figma's submit is a one-off solid style, not the gradient primary button (PLAN C9). */
-.submit {
-  composes: submitLabel from '../../styles/typography.module.css';
-  min-height: 36px;
-  padding: var(--space-200) var(--space-600);
-  border: 0;
-  border-radius: var(--radius-rounded);
-  color: var(--color-neutral-000);
-  background: var(--color-primary-500);
-  font-family: inherit;
-  cursor: pointer;
-}
-
-.submit:hover {
-  background: var(--color-primary-600);
-}
-
-.submit:active {
-  background: var(--color-primary-700);
-}
-
 .status {
   composes: bodyLargeStrong from '../../styles/typography.module.css';
   text-align: center;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .submit {
-    transition: background-color 150ms;
-  }
 }
 
 @media (min-width: 960px) {

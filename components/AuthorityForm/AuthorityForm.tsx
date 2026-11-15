@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import { Button } from '@/components/ui/Button/Button';
 import { CheckboxGroup } from '@/components/ui/CheckboxGroup/CheckboxGroup';
 import { SelectField } from '@/components/ui/SelectField/SelectField';
 import { TextField } from '@/components/ui/TextField/TextField';
@@ -63,9 +64,10 @@ export function AuthorityForm({ form }: { form: AuthorityFormContent }) {
         </p>
 
         <div className={styles.actions}>
-          <button type="submit" className={styles.submit} aria-describedby={consentId}>
+          {/* Full width comes from the .actions column. */}
+          <Button variant="solid" size="large" type="submit" aria-describedby={consentId}>
             {form.submitLabel}
-          </button>
+          </Button>
           {/* Always rendered, so screen readers announce the text when it appears. */}
           <p role="status" className={styles.status}>
             {submitted && 'Thanks! We’ll be in touch soon.'}

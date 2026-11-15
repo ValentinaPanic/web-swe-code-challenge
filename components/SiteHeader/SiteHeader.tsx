@@ -33,6 +33,7 @@ function NavItems({ nav }: { nav: Nav }) {
           <Button
             key={action.label}
             variant={action.variant === 'primary' ? 'solid' : action.variant}
+            size="large"
             href={action.href}
           >
             {action.label}

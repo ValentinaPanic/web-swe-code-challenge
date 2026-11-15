@@ -191,15 +191,6 @@
   }
 }
 
-/* Form submit: a detached Figma style, 12/22 caps with tighter tracking (PLAN C9). */
-.submitLabel {
-  font-size: var(--font-size-100);
-  line-height: var(--line-height-300);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--letter-spacing-submit);
-  text-transform: uppercase;
-}
-
 /* Figma has no named style for buttons; this is the shared 10/16 caps label. */
 .button {
   font-size: var(--font-size-050);
@@ -207,6 +198,12 @@
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-caps);
   text-transform: uppercase;
+}
+
+/* Figma's 12/16 caps label (nav buttons, form submit). After .button so it wins when both apply. */
+.buttonLarge {
+  font-size: var(--font-size-100);
+  line-height: var(--line-height-050);
 }
 
 /* Nav links: 16/28 (Headline Medium line height, from the 960 frame), Headline Small at 1440. */

@@ -40,9 +40,6 @@
 
   /* Not in DS: from Figma cg-font-letter_spacing-caps (button labels). */
   --letter-spacing-caps: 1.5px;
-  /* Not in DS: from the Figma form submit button's detached text style (0.6px). */
-  --letter-spacing-submit: 0.6px;
-
   /*
     Not in DS: from Figma Background/Inverse (nav bar, sticky banner, spotlight
     panels). Must match the nav image's edge exactly, so no nearest token.
